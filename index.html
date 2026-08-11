@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/png" href="https://megahcrypto.github.io/images/megah-logo.png" />
+
+    <!-- ===== PRIMARY TITLE & META ===== -->
+    <title>Buat Token Kripto Tanpa Coding - Generator ERC20 & BEP20 Gratis</title>
+    <meta name="description"
+        content="Buat token kripto sendiri tanpa coding di BNB Chain, Core Chain & Riche Chain. Platform generator token ERC20 & BEP20 gratis. Deploy dalam 60 detik. Mulai buat token kripto Anda sekarang!">
+    <meta name="keywords"
+        content="buat token kripto, cara membuat token kripto, generator token kripto, pembuat token kripto, buat token crypto, cara membuat token crypto, token erc20, token bep20, deploy token, no code token">
+
+    <!-- ===== CANONICAL URL ===== -->
+    <link rel="canonical" href="https://megahcrypto.github.io/">
+
+    <!-- ===== ROBOTS ===== -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+
+    <!-- ===== OPEN GRAPH ===== -->
+    <meta property="og:title" content="Buat Token Kripto Tanpa Coding - Generator ERC20 & BEP20 Gratis">
+    <meta property="og:description"
+        content="Platform pembuat token kripto no-code. Buat token ERC20 dan BEP20 sendiri di BNB Chain, Core Chain & Riche Chain. Gratis, aman, dan cepat.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://megahcrypto.github.io/">
+    <meta property="og:image" content="https://megahcrypto.github.io/images/buat-token-kripto.png">
+    <meta property="og:site_name" content="Megah Crypto - Generator Token Kripto">
+    <meta property="og:locale" content="id_ID">
+
+    <!-- ===== TWITTER CARD ===== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Buat Token Kripto Tanpa Coding - Generator ERC20 & BEP20 Gratis">
+    <meta name="twitter:description"
+        content="Buat token kripto sendiri tanpa coding. Generator token ERC20 & BEP20 gratis. Deploy di BNB Chain, Core Chain & Riche Chain.">
+    <meta name="twitter:image" content="https://megahcrypto.github.io/images/buat-token-kripto.png">
+    <meta name="twitter:creator" content="@MegahCrypto">
+
+    <!-- ===== SCHEMA.ORG STRUCTURED DATA ===== -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Generator Token Kripto Megah Crypto",
+            "description": "Platform no-code untuk membuat token kripto standar ERC-20 dan BEP-20 di berbagai blockchain.",
+            "url": "https://megahcrypto.github.io/",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Web",
+            "browserRequirements": "Membutuhkan wallet Web3 seperti MetaMask atau Trust Wallet",
+            "offers": {
+                "@type": "Offer",
+                "price": "0.00",
+                "priceCurrency": "USD",
+                "description": "Gratis biaya platform, hanya biaya gas jaringan yang berlaku"
+            },
+            "creator": {
+                "@type": "Organization",
+                "name": "Megah Crypto",
+                "url": "https://megahcrypto.github.io/"
+            }
+        }
+    </script>
+
+    <!-- ===== EXTERNAL SCRIPTS ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js" defer></script>
+
+    <!-- ===== FONTS & ICONS ===== -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+    <!-- ===== STYLESHEETS ===== -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- ===== LOADING SCREEN ===== -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="hologram-loader">
+            <div class="hologram-ring"></div>
+            <div class="hologram-ring"></div>
+            <div class="hologram-ring"></div>
+        </div>
+        <div class="logo-explosion">Megah Crypto</div>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem;">Generator Token Kripto</p>
+    </div>
+
+    <!-- ===== BACKGROUND EFFECTS ===== -->
+    <div class="lightning-background">
+        <div class="lightning"></div>
+        <div class="lightning"></div>
+        <div class="lightning"></div>
+        <div class="lightning"></div>
+        <div class="lightning"></div>
+    </div>
+
+    <div class="grid-overlay"></div>
+
+    <!-- ===== CONFETTI & TOAST CONTAINERS ===== -->
+    <div class="confetti-container" id="confettiContainer"></div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== POPUP MODAL ===== -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup" id="popup">
+            <button class="popup-close" id="popupClose" aria-label="Tutup popup">&times;</button>
+            <div class="popup-icon" id="popupIcon">
+                <i class="fas fa-check" aria-hidden="true"></i>
+            </div>
+            <h3 class="popup-title" id="popupTitle">Judul</h3>
+
+            <div class="popup-content">
+                <div class="popup-message" id="popupMessage">Pesan</div>
+
+                <div class="popup-details" id="popupDetails" style="display: none;">
+                    <h4>Detail Transaksi</h4>
+                    <div class="popup-tx-hash" id="popupTxHash"></div>
+                </div>
+
+                <div class="token-address-container" id="tokenAddressContainer" style="display: none;">
+                    <div class="token-address-label">
+                        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                        <span>Alamat Kontrak Token Anda:</span>
+                    </div>
+                    <input type="text" class="token-address-input" id="tokenAddressInput" readonly
+                        aria-label="Alamat token yang berhasil dibuat">
+                    <div class="token-actions">
+                        <button class="btn copy-address-btn" id="copyTokenAddressBtn">
+                            <i class="fas fa-copy" aria-hidden="true"></i> Salin Alamat
+                        </button>
+                        <button class="btn btn-success" id="addTokenToWalletBtn">
+                            <i class="fas fa-wallet" aria-hidden="true"></i> Tambah ke Wallet
+                        </button>
+                        <button class="btn view-explorer-btn" id="viewExplorerBtn">
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i> Lihat di Explorer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-actions" id="popupActions"></div>
+        </div>
+    </div>
+
+    <!-- ===== MOBILE MODAL ===== -->
+    <div class="mobile-modal" id="mobileModal">
+        <div class="mobile-modal-content">
+            <h3><i class="fas fa-mobile-alt" aria-hidden="true"></i> Gunakan DApp Browser</h3>
+            <p>Halaman ini menggunakan Web3 dan berfungsi penuh hanya ketika diakses dari desktop dengan ekstensi wallet
+                seperti MetaMask. Jika Anda di mobile, salin URL ini dan buka melalui DApp Browser di aplikasi wallet
+                Anda (MetaMask, Trust Wallet, Bitget, dll.) untuk mengaktifkan fitur pembuatan token.</p>
+            <div class="mobile-modal-buttons">
+                <button class="btn btn-primary" onclick="copyUrlAndClose()">
+                    <i class="fas fa-copy" aria-hidden="true"></i> Salin URL
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HEADER ===== -->
+    <header role="banner">
+        <div class="container nav-container">
+            <a href="https://megahcrypto.github.io/" class="logo"
+                aria-label="Platform Generator Token Kripto - Kembali ke beranda">
+                <img src="https://megahcrypto.github.io/images/megah-200x200.png"
+                    alt="Logo Megah Crypto - Platform Generator Token Kripto" loading="lazy" width="36" height="36">
+                <span>Megah Crypto</span>
+            </a>
+
+            <nav class="nav-links" role="navigation" aria-label="Navigasi utama">
+                <a href="https://megahcrypto.github.io/"><i class="fas fa-home" aria-hidden="true"></i> Beranda</a>
+                <a href="https://megahcrypto.com/buy/"><i class="fas fa-rocket" aria-hidden="true"></i> PreSale
+                    Token</a>
+                <a href="https://blog.megahcrypto.com/"><i class="fa-brands fa-blogger"></i> Blog & Berita</a>
+            </nav>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Buka menu navigasi" aria-expanded="false"
+                aria-controls="mobileNav">
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ===== STICKY STEP INDICATOR ===== -->
+    <div class="sticky-step-indicator" id="stickyStepIndicator">
+        <div class="step-indicator" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4"
+            aria-label="Proses pembuatan token kripto">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">Pilih Jaringan</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-label">Hubungkan Wallet</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">Detail Token</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Deploy</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MOBILE NAV ===== -->
+    <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Navigasi mobile">
+        <button class="mobile-nav-close" id="mobileNavClose" aria-label="Tutup menu navigasi">
+            <i class="fas fa-times" aria-hidden="true"></i>
+        </button>
+        <nav class="mobile-nav-links">
+            <a href="https://megahcrypto.github.io/"><i class="fas fa-home" aria-hidden="true"></i> Beranda</a>
+            <a href="https://megahcrypto.github.io/guide/"><i class="fas fa-rocket" aria-hidden="true"></i> Panduan</a>
+            <a href="https://megahcrypto.github.io/terms/"><i class="fa-brands fa-blogger"></i> Syarat & Ketentuan</a>
+        </nav>
+    </div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-logo">
+                    <img src="https://megahcrypto.github.io/images/megah-logo.png"
+                        alt="Buat Token Kripto - Platform Generator Token ERC20 & BEP20" loading="lazy" width="100"
+                        height="100">
+                </div>
+
+                <h1 class="animate__animated animate__fadeInUp">BUAT TOKEN KRIPTO SENDIRI</h1>
+                <p class="animate__animated animate__fadeInUp animate__delay-1s">Platform no-code untuk membuat token
+                    kripto kustom di berbagai blockchain. Deploy token ERC-20 atau BEP-20 secara instan tanpa perlu
+                    keahlian coding. Solusi terbaik untuk proyek blockchain Anda.</p>
+
+                <div class="hero-badges animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="badge">
+                        <i class="fas fa-bolt"></i>
+                        <span>Tanpa Coding</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Smart Contract Aman</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-rocket"></i>
+                        <span>Deploy 60 Detik</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-coins"></i>
+                        <span>Multi Blockchain</span>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-gem"></i>
+                        <span>Gratis Biaya Platform</span>
+                    </div>
+                </div>
+
+                <div class="hero-buttons animate__animated animate__fadeInUp animate__delay-3s">
+                    <a href="#token-creator" class="hero-btn hero-btn-primary">
+                        <i class="fas fa-play" aria-hidden="true"></i> Buat Sekarang
+                    </a>
+                    <a href="#panduan" class="hero-btn hero-btn-secondary">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i> Panduan
+                    </a>
+                    <a href="#harga" class="hero-btn hero-btn-secondary">
+                        <i class="fas fa-tag" aria-hidden="true"></i> Harga
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TOKEN CREATOR SECTION ===== -->
+    <section class="token-creator" id="token-creator">
+        <div class="container">
+            <div class="creator-container">
+                <div class="creator-header">
+                    <h2>Cara Buat Token Kripto dalam 4 Langkah</h2>
+                    <p>Ikuti panduan sederhana ini untuk membuat token kripto sendiri dengan cepat dan mudah</p>
+                </div>
+
+                <!-- Step 1: Network Selection -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <i class="fas fa-network-wired" aria-hidden="true"></i>
+                        <span>1. Pilih Jaringan Blockchain</span>
+                    </div>
+                    <select id="blockchainSelect" class="blockchain-dropdown"
+                        aria-label="Pilih jaringan blockchain untuk membuat token kripto">
+                        <option value="bnb">BNB Chain (BEP20)</option>
+                        <option value="core">Core Chain (ERC20)</option>
+                        <option value="eth" disabled>Ethereum (Pemeliharaan)</option>
+                        <option value="ric">Riche Chain (ERC20)</option>
+                        <option value="sol" disabled>Solana (Segera)</option>
+                        <option value="matic" disabled>Polygon (Ditangguhkan)</option>
+                    </select>
+
+                    <div id="currentNetworkIndicator" class="current-network-indicator" style="display: none;">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i>
+                        <span id="currentNetworkText">Terpilih: BNB Smart Chain</span>
+                    </div>
+                </div>
+
+                <!-- Step 2: Connect Wallet -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <i class="fas fa-wallet" aria-hidden="true"></i>
+                        <span>2. Hubungkan Wallet Web3</span>
+                    </div>
+                    <div class="wallet-actions">
+                        <div class="connection-row">
+                            <button id="connectButton" class="btn btn-primary blinking">
+                                <i class="fas fa-plug" aria-hidden="true"></i> Hubungkan Wallet
+                            </button>
+
+                            <button id="switchNetworkBtn" class="btn btn-error" style="display:none;">
+                                <i class="fas fa-exchange-alt" aria-hidden="true"></i> Ganti Jaringan
+                            </button>
+
+                            <div class="wallet-status-badge disconnected" id="walletStatusBadge">
+                                <div class="status-dot"></div>
+                                <span id="walletStatusText">Wallet Belum Terhubung</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wallet-info-container" id="walletInfo">
+                        <div class="wallet-info-header">
+                            <i class="fas fa-wallet" aria-hidden="true"></i>
+                            <span>Informasi Wallet</span>
+                        </div>
+                        <div class="wallet-info-grid">
+                            <div class="wallet-info-item">
+                                <div class="wallet-info-label">
+                                    <i class="fas fa-address-card" aria-hidden="true"></i>
+                                    <span>Alamat:</span>
+                                </div>
+                                <div class="wallet-info-value wallet-address-value" id="walletAddressText">-</div>
+                            </div>
+                            <div class="wallet-info-item">
+                                <div class="wallet-info-label">
+                                    <i class="fas fa-coins" aria-hidden="true"></i>
+                                    <span>Saldo:</span>
+                                </div>
+                                <div class="wallet-info-value" id="walletBalanceText">-</div>
+                            </div>
+                            <div class="wallet-info-item">
+                                <div class="wallet-info-label">
+                                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                    <span>Status Biaya:</span>
+                                </div>
+                                <div class="wallet-info-value" id="balanceCheckText">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Token Details -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <i class="fas fa-edit" aria-hidden="true"></i>
+                        <span>3. Isi Spesifikasi Token</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tokenName">
+                            <i class="fas fa-tag" aria-hidden="true"></i> Nama Token
+                            <span class="tooltip-icon" data-tooltip="Contoh: Bitcoin, Ethereum, Dogecoin">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                            </span>
+                        </label>
+                        <input type="text" id="tokenName" class="form-control" placeholder="Contoh: Bitcoin" required
+                            aria-describedby="tokenNameError" maxlength="30">
+                        <div id="tokenNameError" class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tokenSymbol">
+                            <i class="fas fa-code" aria-hidden="true"></i> Simbol Token
+                            <span class="tooltip-icon" data-tooltip="Contoh: BTC, ETH, DOGE">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                            </span>
+                        </label>
+                        <input type="text" id="tokenSymbol" class="form-control" placeholder="Contoh: BTC" required
+                            aria-describedby="tokenSymbolError" maxlength="10">
+                        <div id="tokenSymbolError" class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tokenDecimals">
+                            <i class="fas fa-divide" aria-hidden="true"></i> Jumlah Desimal
+                            <span class="tooltip-icon" data-tooltip="Standar ERC20/BEP20 menggunakan 18 desimal">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                            </span>
+                        </label>
+                        <input type="number" id="tokenDecimals" class="form-control" placeholder="Desimal (default 18)"
+                            value="18" min="0" max="18" aria-describedby="tokenDecimalsError">
+                        <div id="tokenDecimalsError" class="error-message"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tokenSupply">
+                            <i class="fas fa-layer-group" aria-hidden="true"></i> Total Supply
+                            <span class="tooltip-icon" data-tooltip="Contoh: 1000000 untuk 1 juta token">
+                                <i class="fas fa-info-circle" aria-hidden="true"></i>
+                            </span>
+                        </label>
+                        <input type="number" id="tokenSupply" class="form-control" placeholder="Contoh: 1000000"
+                            required min="1" max="1000000000000" aria-describedby="tokenSupplyError">
+                        <div id="tokenSupplyError" class="error-message"></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Deploy -->
+                <div class="section-container">
+                    <div class="section-header">
+                        <i class="fas fa-calculator" aria-hidden="true"></i>
+                        <span>4. Estimasi Biaya Deployment</span>
+                    </div>
+                    <div class="cost-breakdown" id="costBreakdown">
+                        <div class="cost-item">
+                            <span><i class="fa-brands fa-cc-amazon-pay" aria-hidden="true"></i> Biaya Platform:</span>
+                            <span id="tokenCreationFee">Memuat..</span>
+                        </div>
+                        <div class="gas-fee-row">
+                            <div class="gas-fee-label">
+                                <i class="fas fa-bolt" aria-hidden="true"></i>
+                                <span>Biaya Gas:</span>
+                            </div>
+                            <div class="gas-fee-value">
+                                <span id="estimatedGasFee">Memuat..</span>
+                            </div>
+                        </div>
+                        <div class="gas-gwei-row">
+                            <div class="gas-gwei-label">
+                                <i class="fas fa-fire" aria-hidden="true"></i>
+                                <span>Harga Gas:</span>
+                            </div>
+                            <div class="gas-gwei-value" id="gasPriceGwei">-</div>
+                        </div>
+                        <div class="cost-item">
+                            <span><i class="fa-solid fa-calculator" aria-hidden="true"></i> Total Biaya:</span>
+                            <span id="totalEstimatedFee">Memuat..</span>
+                        </div>
+                    </div>
+                    <button id="createButton" class="btn btn-success btn-block">
+                        <i class="fas fa-rocket" aria-hidden="true"></i> Deploy Sekarang!
+                    </button>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="tech-spinner" aria-hidden="true"></div>
+                    <p>Memproses transaksi di blockchain...</p>
+                </div>
+
+                <div id="status" role="status" aria-live="polite"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== KEUNGGULAN PLATFORM ===== -->
+    <section class="about-web" id="keunggulan">
+        <div class="container">
+            <div class="about-web-content">
+                <h2>Keunggulan Generator Token Kripto Megah Crypto</h2>
+
+                <div class="about-web-text">
+                    <p>Megah Crypto hadir sebagai solusi praktis bagi Anda yang ingin <strong>membuat token
+                            kripto</strong> tanpa perlu memahami kode pemrograman. Platform kami telah digunakan oleh
+                        ratusan pengguna untuk mewujudkan proyek blockchain mereka.</p>
+                </div>
+
+                <div class="about-web-features">
+                    <div class="feature-item">
+                        <h4><i class="fas fa-cogs" style="color: var(--primary);"></i> Fitur Unggulan</h4>
+                        <ul>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> <strong>Proses
+                                    Cepat</strong> - Token siap dalam waktu kurang dari 60 detik</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> <strong>Multi
+                                    Jaringan</strong> - BNB Chain, Core Chain, dan Riche Chain</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> <strong>Tanpa Biaya</strong>
+                                - Tidak ada potongan biaya platform</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> <strong>Kontrak
+                                    Terverifikasi</strong> - Smart contract yang transparan</li>
+                            <li><i class="fas fa-check" style="color: var(--success);"></i> <strong>Kode Sumber</strong>
+                                - Unduh kode Solidity setelah deploy</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4><i class="fas fa-star" style="color: var(--warning);"></i> Manfaat untuk Anda</h4>
+                        <ul>
+                            <li><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Ramah
+                                    Pemula</strong> - Tidak perlu pengalaman blockchain</li>
+                            <li><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Untuk Semua
+                                    Kebutuhan</strong> - Komunitas, bisnis, atau proyek pribadi</li>
+                            <li><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Biaya
+                                    Minim</strong> - Gas fee rendah di BSC dan Core Chain</li>
+                            <li><i class="fas fa-check-circle" style="color: var(--success);"></i>
+                                <strong>Transparan</strong> - Semua biaya terlihat jelas
+                            </li>
+                            <li><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Akses
+                                    Global</strong> - Bisa diakses dari seluruh dunia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HARGA & BIAYA ===== -->
+    <section class="about-web" id="harga">
+        <div class="container">
+            <div class="about-web-content">
+                <h2>Rincian Biaya Buat Token Kripto</h2>
+
+                <div class="about-web-text">
+                    <p>Kami percaya pada transparansi penuh. Berikut rincian biaya yang perlu Anda ketahui sebelum
+                        <strong>membuat token kripto</strong> di platform kami.
+                    </p>
+                </div>
+
+                <div
+                    style="display: grid; grid-template-columns: 1fr; gap: 1.2rem; text-align: left; margin: 1.5rem 0;">
+                    <div
+                        style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); border-radius: 10px; padding: 1.2rem;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.8rem; font-size: 1rem;">
+                            <i class="fas fa-gem" style="color: var(--success);"></i> Biaya Platform: Rp 0
+                        </h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            Kami tidak memungut biaya apapun untuk menggunakan platform. Anda hanya membayar biaya gas
+                            yang diperlukan oleh jaringan blockchain.
+                        </p>
+                    </div>
+
+                    <div
+                        style="background: rgba(255,209,102,0.05); border: 1px solid rgba(255,209,102,0.2); border-radius: 10px; padding: 1.2rem;">
+                        <h4 style="color: var(--warning); margin-bottom: 0.8rem; font-size: 1rem;">
+                            <i class="fas fa-bolt" style="color: var(--warning);"></i> Biaya Gas Jaringan
+                        </h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            Biaya gas berbeda-beda tergantung jaringan dan kondisi lalu lintas. Estimasi real-time
+                            tersedia sebelum Anda deploy.
+                        </p>
+                        <ul
+                            style="list-style: none; padding: 0; margin-top: 0.8rem; color: var(--text-secondary); font-size: 0.85rem;">
+                            <li style="padding: 0.3rem 0;">• <strong>BNB Chain:</strong> ~$0.20 - $0.50</li>
+                            <li style="padding: 0.3rem 0;">• <strong>Core Chain:</strong> ~$0.05 - $0.15</li>
+                            <li style="padding: 0.3rem 0;">• <strong>Riche Chain:</strong> ~$0.02 - $0.08</li>
+                        </ul>
+                    </div>
+
+                    <div
+                        style="background: rgba(0,255,157,0.05); border: 1px solid rgba(0,255,157,0.2); border-radius: 10px; padding: 1.2rem;">
+                        <h4 style="color: var(--success); margin-bottom: 0.8rem; font-size: 1rem;">
+                            <i class="fas fa-wallet" style="color: var(--success);"></i> Total Biaya
+                        </h4>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                            <strong>Total = Rp 0 + Biaya Gas</strong><br>
+                            Lihat estimasi total di bagian <strong>Estimasi Biaya Deployment</strong> sebelum Anda
+                            mengkonfirmasi transaksi.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    style="text-align: center; padding: 1rem; background: rgba(0,212,255,0.05); border-radius: 10px; border: 1px dashed rgba(0,212,255,0.3);">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                        <strong>Penting:</strong> Pastikan saldo wallet Anda mencukupi untuk membayar biaya gas.
+                        Platform akan memeriksa saldo secara otomatis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PANDUAN LENGKAP ===== -->
+    <section class="about-web" id="panduan">
+        <div class="container">
+            <div class="about-web-content">
+                <h2>Cara Membuat Token Kripto: Panduan Lengkap</h2>
+
+                <div class="about-web-text">
+                    <p>Ikuti panduan langkah demi langkah ini untuk <strong>membuat token kripto</strong> sendiri.
+                        Prosesnya mudah dan tidak memerlukan keahlian teknis khusus.</p>
+                </div>
+
+                <div
+                    style="display: grid; grid-template-columns: 1fr; gap: 1.2rem; text-align: left; margin: 1.5rem 0;">
+                    <div
+                        style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15); border-radius: 10px; padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                            <span
+                                style="background: var(--primary-gradient); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">1</span>
+                            <h4 style="color: var(--text); font-size: 1rem;">Pilih Jaringan Blockchain</h4>
+                        </div>
+                        <p
+                            style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; padding-left: 40px;">
+                            Tentukan jaringan yang ingin Anda gunakan. <strong>BNB Chain</strong> adalah pilihan paling
+                            populer karena biaya rendah dan komunitas besar. <strong>Core Chain</strong> dan
+                            <strong>Riche Chain</strong> menawarkan biaya yang lebih murah lagi.
+                        </p>
+                    </div>
+
+                    <div
+                        style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15); border-radius: 10px; padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                            <span
+                                style="background: var(--primary-gradient); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">2</span>
+                            <h4 style="color: var(--text); font-size: 1rem;">Hubungkan Wallet</h4>
+                        </div>
+                        <p
+                            style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; padding-left: 40px;">
+                            Klik tombol <strong>"Hubungkan Wallet"</strong> dan pilih wallet Web3 favorit Anda
+                            (MetaMask, Trust Wallet, dll.). Pastikan wallet Anda berada di jaringan yang sama dengan
+                            yang dipilih.
+                        </p>
+                    </div>
+
+                    <div
+                        style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15); border-radius: 10px; padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                            <span
+                                style="background: var(--primary-gradient); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">3</span>
+                            <h4 style="color: var(--text); font-size: 1rem;">Isi Detail Token</h4>
+                        </div>
+                        <p
+                            style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; padding-left: 40px;">
+                            Masukkan <strong>Nama</strong> (contoh: "Koin Saya"), <strong>Simbol</strong> (contoh:
+                            "KST"), <strong>Desimal</strong> (18 untuk standar ERC20/BEP20), dan <strong>Total
+                                Supply</strong> (contoh: 1000000).
+                        </p>
+                    </div>
+
+                    <div
+                        style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15); border-radius: 10px; padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
+                            <span
+                                style="background: var(--primary-gradient); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">4</span>
+                            <h4 style="color: var(--text); font-size: 1rem;">Deploy Token</h4>
+                        </div>
+                        <p
+                            style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; padding-left: 40px;">
+                            Periksa <strong>Estimasi Biaya</strong>, lalu klik <strong>"Deploy Token
+                                Sekarang!"</strong>. Konfirmasi transaksi di wallet. Setelah sukses, alamat kontrak akan
+                            muncul dan Anda bisa <strong>mengunduh kode sumber</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    style="text-align: center; padding: 1rem; background: rgba(0,255,157,0.05); border-radius: 10px; border: 1px solid rgba(0,255,157,0.2);">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                        <i class="fas fa-lightbulb" style="color: var(--warning);"></i>
+                        <strong>Tips:</strong> Setelah deploy, gunakan tombol <strong>"Tambah ke Wallet"</strong> untuk
+                        melihat token Anda dan verifikasi di block explorer.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="about-web" id="faq">
+        <div class="container">
+            <div class="about-web-content">
+                <h2>Pertanyaan Seputar Buat Token Kripto</h2>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; text-align: left; margin: 1.5rem 0;">
+                    <div
+                        style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--primary);">
+                        <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.3rem;">Apakah benar-benar
+                            gratis untuk buat token kripto?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">Ya! Platform kami
+                            tidak memungut biaya. Anda hanya membayar biaya gas jaringan yang berlaku untuk setiap
+                            transaksi di blockchain.</p>
+                    </div>
+
+                    <div
+                        style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--success);">
+                        <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.3rem;">Blockchain apa saja
+                            yang didukung?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">Saat ini
+                            mendukung <strong>BNB Chain (BEP20)</strong>, <strong>Core Chain (ERC20)</strong>, dan
+                            <strong>Riche Chain (ERC20)</strong>. Jaringan lain akan menyusul.
+                        </p>
+                    </div>
+
+                    <div
+                        style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--warning);">
+                        <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.3rem;">Saya tidak bisa
+                            coding, bisakah buat token kripto?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;"><strong>Tentu
+                                bisa!</strong> Platform kami dirancang khusus sebagai <strong>alat no-code</strong>.
+                            Anda hanya mengisi form dan kami yang membuat smart contract-nya.</p>
+                    </div>
+
+                    <div
+                        style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--primary);">
+                        <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.3rem;">Bisa unduh kode
+                            sumber token?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">Ya! Setelah
+                            deploy berhasil, klik <strong>"Unduh Kode Sumber"</strong> untuk mendapatkan file Solidity
+                            lengkap token Anda.</p>
+                    </div>
+
+                    <div
+                        style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--success);">
+                        <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.3rem;">Wallet apa yang
+                            direkomendasikan?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">Kami sarankan
+                            <strong>MetaMask</strong> untuk desktop dan <strong>Trust Wallet</strong> untuk mobile.
+                            Wallet Web3 lainnya juga kompatibel.
+                        </p>
+                    </div>
+
+                    <div
+                        style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 1rem; border-left: 3px solid var(--warning);">
+                        <h4 style="color: var(--text); font-size: 0.95rem; margin-bottom: 0.3rem;">Berapa lama proses
+                            buat token kripto?</h4>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5;">Prosesnya
+                            <strong>kurang dari 60 detik</strong>. Setelah konfirmasi di wallet, token akan muncul di
+                            blockchain dalam hitungan detik.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TENTANG KAMI ===== -->
+    <section class="about-web" id="tentang">
+        <div class="container">
+            <div class="about-web-content">
+                <h2>Tentang Megah Crypto</h2>
+
+                <div class="about-web-text">
+                    <p><strong>Megah Crypto</strong> adalah platform yang memudahkan siapa saja untuk <strong>membuat
+                            token kripto</strong> sendiri. Kami percaya bahwa teknologi blockchain harus dapat diakses
+                        oleh semua orang, tanpa terkendala kemampuan teknis.</p>
+                    <p style="margin-top: 0.8rem;">Visi kami adalah menjadi <strong>platform generator token
+                            kripto</strong> terpercaya yang membantu ribuan pengguna mewujudkan ide-ide mereka di dunia
+                        blockchain. Keamanan, transparansi, dan kemudahan adalah nilai utama kami.</p>
+                </div>
+
+                <div
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; text-align: center;">
+                    <div style="background: rgba(0,212,255,0.05); border-radius: 10px; padding: 1rem;">
+                        <div style="font-size: 2rem; color: var(--primary); font-weight: 700;">100+</div>
+                        <div style="color: var(--text-secondary); font-size: 0.85rem;">Token Kripto Dibuat</div>
+                    </div>
+                    <div style="background: rgba(0,212,255,0.05); border-radius: 10px; padding: 1rem;">
+                        <div style="font-size: 2rem; color: var(--success); font-weight: 700;">3+</div>
+                        <div style="color: var(--text-secondary); font-size: 0.85rem;">Blockchain Didukung</div>
+                    </div>
+                </div>
+
+                <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.15);">
+                    <h3 style="color: var(--text); margin-bottom: 1rem; font-size: 1.1rem;">Butuh Bantuan?</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.2rem; font-size: 0.9rem;">
+                        Tim kami siap membantu Anda dalam proses <strong>membuat token kripto</strong>. Konsultasi
+                        gratis tersedia untuk menjawab pertanyaan Anda.
+                    </p>
+                    <a href="https://megahcrypto.github.io/contact/" class="btn btn-primary contact-support-btn"
+                        target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-headset" aria-hidden="true"></i> Hubungi Kami
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://megahcrypto.github.io/"><i class="fas fa-home"></i> Beranda</a>
+                    <a href="https://megahcrypto.github.io/guide/"><i class="fa-solid fa-book"></i> Panduan</a>
+                    <a href="https://megahcrypto.github.io/terms/"><i class="fa-solid fa-scale-balanced"></i> Syarat</a>
+                    <a href="https://megahcrypto.github.io/contact/"><i class="fas fa-envelope"></i> Kontak</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 Megah Crypto</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-secondary);">
+                    Platform Generator Token Kripto - Buat Token ERC20 & BEP20 Instan
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="js/security.js"></script>
+    <script src="js/blockchain.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

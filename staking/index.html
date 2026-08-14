@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="shortcut icon" type="image/png" href="https://megahcrypto.github.io/images/megah-logo.png">
+    <title>Platform Staking Token Kripto - Megah crypto</title>
+    <meta name="description"
+        content="Dapatkan keuntungan dari staking token MEGAH di platform kami dapatkan APY 5% reward yang dapat Anda klaim setiap saat!">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.5/ethers.umd.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg: #0B0C10;
+            --s1: rgba(20, 22, 27, 0.75);
+            --s2: rgba(15, 18, 25, 0.6);
+            --s3: rgba(25, 28, 35, 0.7);
+            --c: #00E5FF;
+            --c2: #9D4EFF;
+            --cp: #00B8D4;
+            --cg: rgba(0, 229, 255, 0.3);
+            --cd: rgba(0, 229, 255, 0.15);
+            --cpurp: rgba(157, 78, 255, 0.15);
+            --text: #FFFFFF;
+            --tm: #C0C8D6;
+            --td: #7A8294;
+            --bd: rgba(0, 229, 255, 0.25);
+            --bs: rgba(0, 229, 255, 0.5);
+            --grad-cyan: linear-gradient(135deg, #00E5FF, #9D4EFF);
+            --grad-cyan-light: linear-gradient(135deg, #4DF8FF, #B84CFF);
+            --r: 12px;
+            --r2: 16px;
+            --r3: 24px;
+        }
+
+        body {
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse 70% 50% at 15% 5%, rgba(0, 229, 255, 0.08) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 85% 95%, rgba(157, 78, 255, 0.08) 0%, transparent 55%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* GRID pattern subtle - updated with cyan */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ORBS - updated to cyan/purple */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .o1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(0, 229, 255, 0.08);
+            top: -160px;
+            left: -160px;
+            animation: float1 22s ease-in-out infinite;
+        }
+
+        .o2 {
+            width: 380px;
+            height: 380px;
+            background: rgba(157, 78, 255, 0.08);
+            bottom: 0;
+            right: -100px;
+            animation: float2 28s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(40px, 30px);
+            }
+        }
+
+        @keyframes float2 {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-30px, -40px);
+            }
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px 16px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* CARD - glassmorphism with cyan border */
+        .card {
+            background: var(--s1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r3);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color .3s, box-shadow .3s, transform .2s;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--grad-cyan);
+            pointer-events: none;
+        }
+
+        .card:hover {
+            border-color: var(--bs);
+            box-shadow: 0 0 28px rgba(0, 229, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* CORNER BRACKETS - cyan */
+        .cc {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+        }
+
+        .cc.tl {
+            top: 0;
+            left: 0;
+            border-top: 2px solid var(--c);
+            border-left: 2px solid var(--c);
+            border-radius: var(--r3) 0 0 0;
+        }
+
+        .cc.tr {
+            top: 0;
+            right: 0;
+            border-top: 2px solid var(--c);
+            border-right: 2px solid var(--c);
+            border-radius: 0 var(--r3) 0 0;
+        }
+
+        .cc.bl {
+            bottom: 0;
+            left: 0;
+            border-bottom: 2px solid var(--c);
+            border-left: 2px solid var(--c);
+            border-radius: 0 0 0 var(--r3);
+        }
+
+        .cc.br {
+            bottom: 0;
+            right: 0;
+            border-bottom: 2px solid var(--c);
+            border-right: 2px solid var(--c);
+            border-radius: 0 0 var(--r3) 0;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding: 18px 22px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-frame {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+        }
+
+        .logo-frame img {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 1;
+            display: block;
+        }
+
+        .logo-ring {
+            position: absolute;
+            inset: -3px;
+            border-radius: 15px;
+            background: conic-gradient(from 0deg, var(--c), transparent 40%, var(--c2) 60%, transparent);
+            animation: spin 3s linear infinite;
+            opacity: .7;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .brand-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.25rem;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .brand-chain {
+            font-size: .6rem;
+            color: var(--tm);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        .net-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid var(--bd);
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: .65rem;
+            color: var(--c);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: .5px;
+        }
+
+        .ndot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--c);
+            box-shadow: 0 0 7px var(--c);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .25;
+            }
+        }
+
+        /* BUTTONS - cyan gradient primary */
+        .btn {
+            border: 1px solid var(--cg);
+            border-radius: var(--r);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: .82rem;
+            letter-spacing: .5px;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: all .2s;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 12px 22px;
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--c);
+            text-transform: uppercase;
+        }
+
+        .btn:hover:not(:disabled) {
+            border-color: var(--c);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+            transform: translateY(-1px);
+            background: rgba(0, 229, 255, 0.12);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(.97);
+        }
+
+        .btn:disabled {
+            opacity: .35;
+            cursor: not-allowed;
+        }
+
+        /* PRIMARY BUTTON - cyan to purple gradient */
+        .btn-s {
+            background: var(--grad-cyan);
+            color: #0a0a0f;
+            border-color: var(--c);
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-s:hover:not(:disabled) {
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* MAX BUTTON */
+        .btnmax {
+            background: transparent;
+            border: 1px solid var(--bd);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            font-weight: 700;
+            color: var(--c);
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btnmax:hover {
+            border-color: var(--c);
+            background: rgba(0, 229, 255, 0.1);
+        }
+
+        #connectBtn {
+            min-width: 158px;
+        }
+
+        /* INPUT FIELD - WHITE BACKGROUND, BLACK TEXT (sesuai permintaan) */
+        .ig {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            border: 2px solid var(--c);
+            border-radius: var(--r);
+            padding: 4px 6px 4px 14px;
+            transition: all .2s;
+            position: relative;
+        }
+
+        .ig:focus-within {
+            border-color: var(--c2);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
+        }
+
+        .ci {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #1a1a2e;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            flex: 1;
+            min-width: 80px;
+            padding: 11px 0;
+            caret-color: var(--c);
+        }
+
+        .ci::placeholder {
+            color: #9ca3af;
+            font-size: .85rem;
+            font-weight: 400;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* SECTION HEAD */
+        .sh {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sh-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--bs), transparent);
+        }
+
+        .sh-t {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--c);
+            white-space: nowrap;
+        }
+
+        .inp-lbl {
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--c);
+            margin-bottom: 7px;
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* STATS */
+        .sr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 0;
+            border-bottom: 1px solid var(--bd);
+        }
+
+        .sr:last-child {
+            border-bottom: none;
+        }
+
+        .sl {
+            font-size: .7rem;
+            color: var(--tm);
+            font-weight: 500;
+        }
+
+        .sl i {
+            margin-right: 6px;
+            opacity: .7;
+        }
+
+        .sv-big {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.55rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .sv-med {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .88rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sv-sm {
+            font-size: .8rem;
+            color: var(--tm);
+            font-weight: 500;
+        }
+
+        /* CHIP */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 7px;
+            padding: 4px 10px;
+            font-size: .65rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .chip-ok {
+            background: rgba(0, 229, 255, 0.12);
+            color: var(--c);
+            border: 1px solid var(--cg);
+        }
+
+        .chip-no {
+            background: rgba(255, 85, 85, 0.1);
+            color: #ff7777;
+            border: 1px solid rgba(255, 85, 85, 0.25);
+        }
+
+        /* LOCK BADGE */
+        .lbadge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid var(--bd);
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            font-weight: 700;
+            color: var(--c);
+        }
+
+        /* BAL BAR */
+        .balbar {
+            background: var(--s2);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .balbar-lbl {
+            font-size: .68rem;
+            color: var(--tm);
+            font-weight: 500;
+        }
+
+        .balbar-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .98rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* APY BLOCK */
+        .apyblock {
+            background: var(--s2);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .apyblock::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), transparent 60%);
+        }
+
+        .apy-lbl {
+            font-size: .62rem;
+            color: var(--tm);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .apy-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.3rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .apy-sub {
+            font-size: .58rem;
+            color: var(--td);
+            margin-top: 4px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* POOL GRID */
+        .pgrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .pcell {
+            background: var(--s2);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            padding: 14px;
+            transition: border-color .2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pcell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+        }
+
+        .pcell:hover {
+            border-color: var(--bs);
+        }
+
+        .pc-ico {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(0, 229, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .72rem;
+            color: var(--c);
+            margin-bottom: 10px;
+        }
+
+        .pc-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .92rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3px;
+        }
+
+        .pc-lbl {
+            font-size: .6rem;
+            color: var(--tm);
+            font-weight: 500;
+        }
+
+        /* DIVIDER */
+        .dv {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--c), transparent);
+            margin: 18px 0;
+        }
+
+        .hint {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            background: rgba(0, 229, 255, 0.03);
+            border: 1px solid var(--bd);
+            border-left: 3px solid var(--c);
+            border-radius: 0 var(--r) var(--r) 0;
+            padding: 9px 12px;
+            font-size: .68rem;
+            color: var(--tm);
+            line-height: 1.5;
+            margin-top: 6px;
+        }
+
+        .hint i {
+            color: var(--c);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .arow {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .arow .btn {
+            flex: 1;
+            font-size: .72rem;
+            padding: 12px 8px;
+        }
+
+        /* MAIN GRID */
+        .mg {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media(min-width:820px) {
+            .mg {
+                grid-template-columns: 1fr 1fr;
+                gap: 18px;
+            }
+        }
+
+        /* ACTIVITY */
+        .alist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .alist::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .alist::-webkit-scrollbar-track {
+            background: var(--s2);
+        }
+
+        .alist::-webkit-scrollbar-thumb {
+            background: var(--c);
+            border-radius: 999px;
+        }
+
+        .aitem {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--s2);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            padding: 12px 14px;
+            transition: border-color .2s;
+        }
+
+        .aitem:hover {
+            border-color: var(--bs);
+        }
+
+        .aico {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            flex-shrink: 0;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--bd);
+            color: var(--c);
+        }
+
+        .ainf {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .atop {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .abot {
+            font-size: .63rem;
+            color: var(--tm);
+            margin-top: 3px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .atime {
+            font-size: .6rem;
+            color: var(--c);
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--bd);
+            border-radius: 5px;
+            padding: 2px 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 38px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .empty-ico {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            background: var(--s2);
+            border: 1px solid var(--bd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--td);
+        }
+
+        .empty h3 {
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--tm);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .empty p {
+            font-size: .7rem;
+            color: var(--td);
+            max-width: 220px;
+        }
+
+        /* ============================================================
+       WALLET MODAL — diadopsi dari halaman terms
+       ============================================================ */
+        .wo {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 12, 16, 0.96);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 9998;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity .3s, visibility .3s;
+        }
+
+        .wo.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .ws {
+            width: 100%;
+            max-width: 440px;
+            background: var(--s1);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--bs);
+            border-radius: var(--r3) var(--r3) 0 0;
+            padding: 28px 22px 44px;
+            transform: translateY(100%);
+            transition: transform .35s cubic-bezier(.32, 1, .6, 1);
+            position: relative;
+        }
+
+        .wo.show .ws {
+            transform: translateY(0);
+        }
+
+        .ws::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--grad-cyan);
+        }
+
+        @media(min-width:500px) {
+            .wo {
+                align-items: center;
+            }
+
+            .ws {
+                border-radius: var(--r3);
+                max-width: 400px;
+            }
+        }
+
+        .ws-handle {
+            width: 38px;
+            height: 3px;
+            border-radius: 999px;
+            background: var(--bs);
+            margin: 0 auto 22px;
+            display: block;
+        }
+
+        @media(min-width:500px) {
+            .ws-handle {
+                display: none;
+            }
+        }
+
+        .ws-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--c);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ws-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--bd);
+        }
+
+        .ws-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--bd);
+            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--tm);
+            transition: all .2s;
+        }
+
+        .ws-close:hover {
+            border-color: var(--c);
+            color: var(--c);
+        }
+
+        .wopt {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--s2);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            padding: 15px;
+            cursor: pointer;
+            transition: all .2s;
+            margin-bottom: 10px;
+        }
+
+        .wopt:hover {
+            border-color: var(--c);
+            background: rgba(0, 229, 255, 0.05);
+        }
+
+        .wopt:active {
+            transform: scale(.98);
+        }
+
+        .wico {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            background: var(--s1);
+            border: 1px solid var(--bd);
+        }
+
+        .wname {
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .wdesc {
+            font-size: .63rem;
+            color: var(--tm);
+            margin-top: 2px;
+        }
+
+        .warrow {
+            margin-left: auto;
+            color: var(--bd);
+            font-size: .78rem;
+            transition: color .2s;
+        }
+
+        .wopt:hover .warrow {
+            color: var(--c);
+        }
+
+        /* ============================================================
+       NOTIFICATION
+       ============================================================ */
+        .no {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 12, 16, 0.96);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity .3s, visibility .3s;
+            padding: 20px;
+        }
+
+        .no.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .nc {
+            width: 100%;
+            max-width: 370px;
+            background: var(--s1);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--bs);
+            border-radius: var(--r3);
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            animation: npop .4s cubic-bezier(.34, 1.56, .64, 1);
+        }
+
+        @keyframes npop {
+            from {
+                opacity: 0;
+                transform: scale(.92);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .nc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--grad-cyan);
+        }
+
+        .nglow {
+            position: absolute;
+            top: -110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: .45;
+        }
+
+        .ni {
+            width: 68px;
+            height: 68px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 1.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ntitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .nmsg {
+            font-size: .85rem;
+            color: var(--tm);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .ntx {
+            background: var(--s2);
+            border: 1px solid var(--bd);
+            border-radius: var(--r);
+            padding: 11px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nhash {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .73rem;
+            color: var(--tm);
+            flex: 1;
+            text-align: left;
+        }
+
+        .nview {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--cg);
+            color: var(--c);
+            border-radius: 7px;
+            padding: 5px 12px;
+            font-size: .65rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all .2s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .nview:hover {
+            border-color: var(--c);
+            background: rgba(0, 229, 255, 0.2);
+        }
+
+        .nclose {
+            background: var(--s2);
+            border: 1px solid var(--bd);
+            color: var(--tm);
+            border-radius: var(--r);
+            padding: 10px 30px;
+            font-size: .76rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all .2s;
+            text-transform: uppercase;
+        }
+
+        .nclose:hover {
+            border-color: var(--c);
+            color: var(--c);
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: var(--s2);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            overflow: hidden;
+            transition: border-color .2s;
+            margin-bottom: 8px;
+        }
+
+        .faq-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .faq-item:hover {
+            border-color: var(--bs);
+        }
+
+        .faq-q {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 18px;
+            cursor: pointer;
+            gap: 12px;
+            user-select: none;
+        }
+
+        .faq-qt {
+            font-size: .84rem;
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .faq-ic {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 1px solid var(--bd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .58rem;
+            color: var(--tm);
+            flex-shrink: 0;
+            transition: all .3s;
+        }
+
+        .faq-item.open .faq-ic {
+            border-color: var(--c);
+            color: var(--c);
+            background: rgba(0, 229, 255, 0.1);
+            transform: rotate(180deg);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .32s ease;
+        }
+
+        .faq-a-in {
+            font-size: .78rem;
+            color: var(--tm);
+            line-height: 1.7;
+            border-top: 1px solid var(--bd);
+            padding: 14px 18px;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 260px;
+        }
+
+        /* FOOTER */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 20px 4px 0;
+            border-top: 1px solid var(--bd);
+            font-size: .65rem;
+            color: var(--td);
+        }
+
+        .flinks {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .flinks a {
+            color: var(--tm);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color .2s;
+        }
+
+        .flinks a:hover {
+            color: var(--c);
+        }
+
+        /* MOBILE */
+        @media(max-width:480px) {
+            .wrap {
+                padding: 10px 10px 50px;
+            }
+
+            .card {
+                padding: 16px 14px;
+                border-radius: 20px;
+            }
+
+            .header {
+                padding: 14px 16px;
+            }
+
+            .brand-name {
+                font-size: 1.1rem;
+            }
+
+            .net-pill {
+                display: none;
+            }
+
+            #connectBtn {
+                min-width: 126px;
+                font-size: .74rem;
+                padding: 10px 14px;
+            }
+
+            .pgrid {
+                gap: 8px;
+            }
+
+            .pcell {
+                padding: 12px;
+            }
+
+            .apy-num {
+                font-size: 1.85rem;
+            }
+
+            .sv-big {
+                font-size: 1.25rem;
+            }
+
+            .arow .btn {
+                font-size: .68rem;
+                padding: 11px 6px;
+            }
+
+            .footer {
+                font-size: .6rem;
+            }
+
+            .ws {
+                padding: 24px 18px 38px;
+            }
+        }
+
+        @media(max-width:360px) {
+            .brand-name {
+                font-size: .95rem;
+                letter-spacing: 1px;
+            }
+
+            .apy-num {
+                font-size: 1.55rem;
+            }
+
+            #connectBtn {
+                min-width: 108px;
+                font-size: .68rem;
+                padding: 8px 10px;
+            }
+
+            .sv-big {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* STAKING CALCULATOR */
+        .calc-card {
+            background: var(--s2);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r2);
+            margin-top: 14px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .calc-card:hover {
+            border-color: var(--bs);
+            transform: translateY(-2px);
+        }
+
+        .calc-header {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(157, 78, 255, 0.08));
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--bd);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calc-header i {
+            color: var(--c);
+            font-size: 1rem;
+        }
+
+        .calc-header h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            flex: 1;
+        }
+
+        .calc-apy-badge {
+            background: rgba(0, 229, 255, 0.12);
+            border: 1px solid var(--c);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--c);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .calc-body {
+            padding: 18px;
+        }
+
+        .calc-input-group {
+            margin-bottom: 20px;
+        }
+
+        .calc-input-group label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--c);
+            margin-bottom: 7px;
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .calc-input-group label i {
+            margin-right: 5px;
+        }
+
+        .calc-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            border: 2px solid var(--c);
+            border-radius: var(--r);
+            padding: 4px 6px 4px 14px;
+            transition: all .2s;
+            position: relative;
+        }
+
+        .calc-input-wrapper:focus-within {
+            border-color: var(--c2);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2);
+        }
+
+        .calc-input-wrapper input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #1a1a2e;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            flex: 1;
+            min-width: 80px;
+            padding: 11px 0;
+            caret-color: var(--c);
+        }
+
+        .calc-input-wrapper input::placeholder {
+            color: #9ca3af;
+            font-size: .85rem;
+            font-weight: 400;
+        }
+
+        .calc-input-wrapper span {
+            color: #6b7280;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+
+        .calc-period-item {
+            background: var(--s1);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--bd);
+            border-radius: var(--r);
+            padding: 12px 8px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .calc-period-item:hover {
+            border-color: var(--c);
+            background: rgba(0, 229, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .calc-period-label {
+            font-size: 0.6rem;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .calc-period-label i {
+            margin-right: 4px;
+            color: var(--c);
+        }
+
+        .calc-period-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            background: var(--grad-cyan);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .calc-period-value.highlight {
+            background: linear-gradient(135deg, #00E5FF, #B84CFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .calc-note {
+            font-size: 0.6rem;
+            color: var(--td);
+            text-align: center;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--bd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .calc-note i {
+            color: var(--c);
+        }
+
+        @media(max-width:480px) {
+            .calc-body {
+                padding: 14px;
+            }
+
+            .calc-input-wrapper input {
+                font-size: 0.85rem;
+                padding: 9px 0;
+            }
+
+            .calc-period-value {
+                font-size: 0.75rem;
+            }
+
+            .calc-period-value.highlight {
+                font-size: 0.85rem;
+            }
+
+            .calc-grid {
+                gap: 8px;
+            }
+
+            .calc-period-item {
+                padding: 10px 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="wrap">
+
+        <!-- HEADER -->
+        <div class="card header">
+            <div class="cc tl"></div>
+            <div class="cc tr"></div>
+            <div class="cc bl"></div>
+            <div class="cc br"></div>
+            <div class="brand">
+                <div class="logo-frame">
+                    <div class="logo-ring"></div>
+                    <img src="https://megahcrypto.github.io/images/megah-logo.png" alt="MEGAH">
+                </div>
+                <div>
+                    <div class="brand-name">MEGAH STAKING</div>
+                    <div class="brand-chain">Stake MEGAH earn MEGAH</div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="net-pill"><span class="ndot"></span>BNB Smart Chain&nbsp;·&nbsp;#56</div>
+                <button class="btn btn-s" id="connectBtn"><i class="fas fa-plug"></i>&nbsp;Connect</button>
+            </div>
+        </div>
+
+        <!-- MAIN GRID -->
+        <div class="mg">
+
+            <!-- LEFT -->
+            <div style="display:flex;flex-direction:column;gap:14px;">
+
+                <!-- MY STAKE -->
+                <div class="card">
+                    <div class="cc tl"></div>
+                    <div class="cc br"></div>
+                    <div class="sh">
+                        <div class="sh-t">My Staking</div>
+                        <div class="sh-line"></div>
+                        <span id="lockTimer" class="lbadge"><i class="fas fa-lock"
+                                style="font-size:.58rem;"></i>&nbsp;--</span>
+                    </div>
+                    <div class="sr">
+                        <div>
+                            <div class="sl"><i class="fas fa-coins"></i>Total Staked</div>
+                            <div class="sv-big" id="stakedAmount">0.00</div>
+                            <div
+                                style="font-size:.58rem;color:var(--td);margin-top:3px;font-family:'JetBrains Mono',monospace;">
+                                MEGAH TOKEN</div>
+                        </div>
+                    </div>
+                    <div class="sr">
+                        <div>
+                            <div class="sl"><i class="fas fa-gift"></i>Rewards Available</div>
+                            <div class="sv-big" id="pendingReward">0.00</div>
+                            <div
+                                style="font-size:.58rem;color:var(--td);margin-top:3px;font-family:'JetBrains Mono',monospace;">
+                                MEGAH TOKEN</div>
+                        </div>
+                    </div>
+                    <div class="sr">
+                        <span class="sl"><i class="fas fa-clock"></i>Lock Ends</span>
+                        <span class="sv-sm" id="lockEnds">-</span>
+                    </div>
+                    <div class="sr">
+                        <span class="sl"><i class="fas fa-unlock-alt"></i>Withdrawal Status</span>
+                        <span id="canUnstakeStatus" class="chip chip-no">❌ Locked</span>
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="card">
+                    <div class="cc tl"></div>
+                    <div class="cc br"></div>
+                    <div class="sh">
+                        <div class="sh-t">Actions</div>
+                        <div class="sh-line"></div>
+                    </div>
+
+                    <div class="balbar">
+                        <div class="balbar-lbl"><i class="fas fa-wallet" style="margin-right:5px;"></i>Wallet Balance
+                        </div>
+                        <div class="balbar-val"><span id="walletBalance">0.00</span>&nbsp;MEGAH</div>
+                    </div>
+
+                    <!-- STAKE -->
+                    <div style="margin-bottom:14px;">
+                        <span class="inp-lbl"><i class="fas fa-arrow-down" style="margin-right:4px;"></i>Stake
+                            Amount</span>
+                        <div class="ig">
+                            <input type="number" id="stakeAmount" placeholder="Enter MEGAH amount..." class="ci" min="0"
+                                step="any" autocomplete="off">
+                            <button class="btnmax" id="stakeMaxBtn">MAX</button>
+                        </div>
+                        <div class="hint"><i class="fas fa-circle-info"></i>Tokens are locked for 90 days. Rewards are
+                            calculated automatically every second.</div>
+                    </div>
+                    <button class="btn btn-s" id="stakeBtn" style="width:100%;padding:14px;"><i
+                            class="fas fa-arrow-down-to-line"></i>&nbsp;Stake Now</button>
+
+                    <div class="dv"></div>
+
+                    <!-- WITHDRAW -->
+                    <div style="margin-bottom:14px;">
+                        <span class="inp-lbl"><i class="fas fa-arrow-up" style="margin-right:4px;"></i>Withdraw
+                            Amount</span>
+                        <div class="ig">
+                            <input type="number" id="withdrawAmount" placeholder="Enter MEGAH amount..." class="ci"
+                                min="0" step="any" autocomplete="off">
+                            <button class="btnmax" id="withdrawMaxBtn">MAX</button>
+                        </div>
+                        <div class="hint"><i class="fas fa-circle-info"></i>Withdrawal is only available after the
+                            90-day lock period ends.</div>
+                    </div>
+                    <button class="btn" id="withdrawBtn" style="width:100%;padding:14px;"><i
+                            class="fas fa-arrow-up-from-bracket"></i>&nbsp;Withdraw Tokens</button>
+
+                    <div class="arow">
+                        <button class="btn" id="extendLockBtn"><i class="fas fa-rotate-right"></i>&nbsp;Extend
+                            Lock</button>
+                        <button class="btn btn-s" id="claimBtn"><i class="fas fa-gift"></i>&nbsp;Claim Reward</button>
+                    </div>
+                </div>
+
+            </div><!-- /left -->
+
+            <!-- RIGHT -->
+            <div style="display:flex;flex-direction:column;gap:14px;">
+
+                <!-- POOL STATS -->
+                <div class="card">
+                    <div class="cc tl"></div>
+                    <div class="cc br"></div>
+                    <div class="sh">
+                        <div class="sh-t">Pool Statistics</div>
+                        <div class="sh-line"></div>
+                    </div>
+                    <div class="apyblock">
+                        <div>
+                            <div class="apy-lbl">APY · Annual Percentage Yield</div>
+                            <div class="apy-num" id="apy">0%</div>
+                            <div class="apy-sub">Calculated Automatically Per Second</div>
+                        </div>
+                        <i class="fas fa-chart-line" style="font-size:2rem;color:var(--c);opacity:.12;"></i>
+                    </div>
+                    <div class="pgrid">
+                        <div class="pcell">
+                            <div class="pc-ico"><i class="fas fa-layer-group"></i></div>
+                            <div class="pc-num" id="totalStaked">0</div>
+                            <div class="pc-lbl">Total Staked</div>
+                        </div>
+                        <div class="pcell">
+                            <div class="pc-ico"><i class="fas fa-clock"></i></div>
+                            <div class="pc-num" id="lockDuration">90 days</div>
+                            <div class="pc-lbl">Lock Duration</div>
+                        </div>
+                        <div class="pcell">
+                            <div class="pc-ico"><i class="fas fa-hand-holding-dollar"></i></div>
+                            <div class="pc-num" id="unclaimedRewards">0</div>
+                            <div class="pc-lbl">Unclaimed Rewards</div>
+                        </div>
+                        <div class="pcell">
+                            <div class="pc-ico"><i class="fas fa-vault"></i></div>
+                            <div class="pc-num" id="contractBalance">0</div>
+                            <div class="pc-lbl">Reward Pool Balance</div>
+                        </div>
+                    </div>
+                    <div class="sr" style="margin-top:12px;">
+                        <span class="sl"><i class="fas fa-gauge-high"></i>Reward Rate</span>
+                        <span class="sv-med" id="rewardRate">0/sec</span>
+                    </div>
+                </div>
+
+                <!-- ACTIVITY -->
+                <div class="card">
+                    <div class="cc tl"></div>
+                    <div class="cc br"></div>
+                    <div class="sh" style="margin-bottom:14px;">
+                        <div class="sh-t">Recent Activity</div>
+                        <div class="sh-line"></div>
+                        <span id="activityCount"
+                            style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--td);white-space:nowrap;">0
+                            transactions</span>
+                    </div>
+                    <div id="activityContainer">
+                        <div class="empty">
+                            <div class="empty-ico"><i class="fas fa-plug"></i></div>
+                            <h3>Not Connected</h3>
+                            <p>Connect your wallet to view transaction history</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAKING CALCULATOR -->
+                <div class="calc-card">
+                    <div class="calc-header">
+                        <i class="fas fa-calculator"></i>
+                        <h4>STAKING CALCULATOR</h4>
+                        <span class="calc-apy-badge"><i class="fas fa-chart-line"></i> APY 5%</span>
+                    </div>
+                    <div class="calc-body">
+                        <div class="calc-input-group">
+                            <label><i class="fas fa-coins"></i> MEGAH AMOUNT</label>
+                            <div class="calc-input-wrapper">
+                                <input type="number" id="calcStakeAmount" placeholder="Enter MEGAH amount..."
+                                    value="100000" step="any" min="0">
+                                <span>MEGAH</span>
+                            </div>
+                        </div>
+
+                        <div class="calc-grid">
+                            <div class="calc-period-item">
+                                <div class="calc-period-label"><i class="fas fa-sun"></i> 1 DAY</div>
+                                <div class="calc-period-value" id="calcDay1">0.00 MEGAH</div>
+                            </div>
+                            <div class="calc-period-item">
+                                <div class="calc-period-label"><i class="fas fa-calendar-week"></i> 1 WEEK</div>
+                                <div class="calc-period-value" id="calcWeek1">0.00 MEGAH</div>
+                            </div>
+                            <div class="calc-period-item">
+                                <div class="calc-period-label"><i class="fas fa-calendar-alt"></i> 1 MONTH</div>
+                                <div class="calc-period-value highlight" id="calcMonth1">0.00 MEGAH</div>
+                            </div>
+                            <div class="calc-period-item">
+                                <div class="calc-period-label"><i class="fas fa-calendar-plus"></i> 1 YEAR</div>
+                                <div class="calc-period-value" id="calcYear1">0.00 MEGAH</div>
+                            </div>
+                        </div>
+
+                        <div class="calc-note">
+                            <i class="fas fa-circle-info"></i>
+                            <span>Simple interest calculation per second at 5% APY</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /right -->
+        </div><!-- /mg -->
+
+        <!-- FAQ -->
+        <div class="card">
+            <div class="cc tl"></div>
+            <div class="cc br"></div>
+            <div class="sh">
+                <div class="sh-t">FAQ · Frequently Asked Questions</div>
+                <div class="sh-line"></div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">What is MEGAH Staking?</span><span class="faq-ic"><i
+                            class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">MEGAH Staking is a program where you lock your MEGAH tokens into a smart
+                        contract and earn rewards automatically every second. The more you stake and the longer you
+                        stake, the greater the rewards you receive.</div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">How long are my tokens locked after staking?</span><span
+                        class="faq-ic"><i class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">After staking, your tokens are locked for <strong style="color:var(--c)">90
+                            days</strong>. During this period you cannot withdraw the
+                        staking principal, but rewards continue to accrue and can be claimed at any time without
+                        waiting for the lock to end.</div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">How are my rewards calculated?</span><span class="faq-ic"><i
+                            class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">Rewards are calculated proportionally based on the amount of MEGAH you
+                        have staked relative to the total pool, multiplied by the current APY. The basic formula
+                        is:<br><br><span
+                            style="color:var(--c);font-family:'JetBrains Mono',monospace;font-size:.72rem;">Reward/sec
+                            = (Your Stake ÷ Total Pool) × Reward Rate</span><br><br>A real-time estimate is shown
+                        in the "Pending Reward" section of your dashboard.</div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">When can I withdraw my tokens?</span><span class="faq-ic"><i
+                            class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">Tokens can only be withdrawn after the 90-day lock period ends. The
+                        dashboard status will change to <strong style="color:var(--c)">"Can Withdraw"</strong> and
+                        the Withdraw button will become active. Rewards can be claimed at any time without waiting
+                        for the lock to end.</div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">What does the "Extend Lock" button do?</span><span
+                        class="faq-ic"><i class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">The <strong style="color:var(--c)">Extend Lock</strong> button resets
+                        the lock period from now + 90 days forward. This is useful if you want to continue staking
+                        longer without having to withdraw and re-stake. Please note that this will reset your lock
+                        timer.</div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">Is this smart contract safe?</span><span class="faq-ic"><i
+                            class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">The smart contract uses the battle-tested OpenZeppelin standard, equipped
+                        with <strong style="color:var(--c)">ReentrancyGuard</strong> (anti-reentrancy attack
+                        protection) and <strong style="color:var(--c)">SafeERC20</strong> for secure token
+                        transfers. The reward token is immutable — it cannot be changed after deployment.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">Which wallets are supported?</span><span class="faq-ic"><i
+                            class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">Supported wallets: <strong style="color:var(--c)">MetaMask</strong>, <strong
+                            style="color:var(--c)">Bitget Wallet</strong>, <strong
+                            style="color:var(--c)">WalletConnect</strong>, and
+                        <strong style="color:var(--c)">TokenPocket</strong>. The BNB Smart Chain network (Chain ID: 56)
+                        will be added automatically when you connect your wallet.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q"><span class="faq-qt">Where can I buy MEGAH tokens?</span><span class="faq-ic"><i
+                            class="fas fa-chevron-down"></i></span></div>
+                <div class="faq-a">
+                    <div class="faq-a-in">You can buy MEGAH through: <a
+                            href="https://pancakeswap.finance/swap?chain=bsc&outputCurrency=0xc55d416476CFC6e879948eD5a5F4461c43Af45Aa&inputCurrency=0x55d398326f99059fF775485246999027B3197955"
+                            target="_blank"
+                            style="color:var(--c);text-decoration:none;font-weight:600;">PancakeSwap</a>.
+                        Or through other purchase mechanisms such as a public sale, on DEX & etc.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <span style="font-family:'JetBrains Mono',monospace;letter-spacing:.5px;">© 2026 Megah Crypto on Github
+                Team</span>
+            <div class="flinks">
+                <a href="https://megahcrypto.github.io/buy/" target="_blank"><i class="fas fa-cart-plus"></i>Buy
+                    MEGAH</a>
+                <a href="https://x.com/megahcrypto" target="_blank"><i class="fab fa-twitter"></i>Twitter</a>
+                <a href="https://t.me/megahcrypto" target="_blank"><i class="fab fa-telegram"></i>Telegram</a>
+                <a href="https://megahcrypto.github.io/services/" target="_blank"><i
+                        class="fas fa-book-open"></i>Services</a>
+            </div>
+        </div>
+
+    </div><!-- /wrap -->
+
+    <!-- ============================================================
+  WALLET MODAL — diadopsi dari halaman terms
+  ============================================================ -->
+    <div class="wo" id="walletOverlay">
+        <div class="ws">
+            <button class="ws-close" id="wsClose"><i class="fas fa-xmark"></i></button>
+            <span class="ws-handle"></span>
+            <div class="ws-title">Select Wallet</div>
+            <div class="wopt" onclick="connectWithWallet('metamask')">
+                <div class="wico">🦊</div>
+                <div>
+                    <div class="wname">MetaMask</div>
+                    <div class="wdesc">Most popular browser extension</div>
+                </div>
+                <i class="fas fa-chevron-right warrow"></i>
+            </div>
+            <div class="wopt" onclick="connectWithWallet('bitget')">
+                <div class="wico">🟦</div>
+                <div>
+                    <div class="wname">Bitget Wallet</div>
+                    <div class="wdesc">Multi-chain Web3 wallet</div>
+                </div>
+                <i class="fas fa-chevron-right warrow"></i>
+            </div>
+            <div class="wopt" onclick="connectWithWallet('walletconnect')">
+                <div class="wico">🔗</div>
+                <div>
+                    <div class="wname">WalletConnect</div>
+                    <div class="wdesc">Scan QR from your mobile wallet</div>
+                </div>
+                <i class="fas fa-chevron-right warrow"></i>
+            </div>
+            <div class="wopt" onclick="connectWithWallet('tokenpocket')">
+                <div class="wico">💙</div>
+                <div>
+                    <div class="wname">TokenPocket</div>
+                    <div class="wdesc">Trusted DeFi wallet</div>
+                </div>
+                <i class="fas fa-chevron-right warrow"></i>
+            </div>
+            <div class="hint" style="margin-top:14px;"><i class="fas fa-circle-info"></i>BNB Smart Chain network will be
+                added automatically to your wallet.</div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+  NOTIFICATION
+  ============================================================ -->
+    <div class="no" id="notificationOverlay">
+        <div class="nc">
+            <div class="nglow" id="notifGlow"></div>
+            <div class="ni" id="notifIconWrap"><span id="notificationIcon">✅</span></div>
+            <div class="ntitle" id="notificationTitle">SUCCESS</div>
+            <div class="nmsg" id="notificationMessage">Transaction processed successfully.</div>
+            <div class="ntx" id="notificationTxContainer" style="display:none;">
+                <span class="nhash" id="notificationTxHash"></span>
+                <a class="nview" id="notificationTxLink" href="#" target="_blank"><i
+                        class="fas fa-external-link-alt"></i>&nbsp;View TX</a>
+            </div>
+            <button class="nclose" id="closeNotifyBtn">Close</button>
+        </div>
+    </div>
+
+    <script>
+        (async function () {
+            "use strict";
+            const STAKING_ADDR = "0xAFC3DD84529F9573b0e5abe77E9250bE627C878f";
+            const TOKEN_ADDR = "0xc55d416476cfc6e879948ed5a5f4461c43af45aa";
+            const CHAIN_ID = 56; const CHAIN_NAME = "BNB Smart Chain";
+            const RPC_URL = "https://bsc-rpc.publicnode.com/"; const EXPLORER = "https://bscscan.com/"; const CURRENCY = "BNB";
+            const STAKING_ABI = ["function stake(uint256 amount) external", "function withdraw(uint256 amount) external", "function extendLock() external", "function claimReward() external", "function earned(address account) view returns (uint256)", "function users(address) view returns (uint256 amount, uint256 lockedUntil, uint256 rewardPerTokenPaid, uint256 rewards)", "function totalStaked() view returns (uint256)", "function apy() view returns (uint256)", "function lockDuration() view returns (uint256)", "function rewardRate() view returns (uint256)", "function totalUnclaimedRewards() view returns (uint256)", "function lockTimeRemaining(address) view returns (uint256)", "function canUnstake(address) view returns (bool)", "function getAPY() view returns (uint256)", "event Staked(address indexed user, uint256 amount)", "event Withdrawn(address indexed user, uint256 amount)", "event RewardClaimed(address indexed user, uint256 amount)", "event LockExtended(address indexed user, uint256 newLockUntil)"];
+            const TOKEN_ABI = ["function balanceOf(address) view returns (uint256)", "function allowance(address,address) view returns (uint256)", "function approve(address spender, uint256 amount) returns (bool)", "function decimals() view returns (uint8)", "function symbol() view returns (string)"];
+            let provider, signer, account, stakingContract, tokenContract, decimals = 18, tokenSymbol = "MEGAH";
+            const $ = id => document.getElementById(id);
+            const connectBtn = $('connectBtn'), stakedAmountEl = $('stakedAmount'), pendingRewardEl = $('pendingReward'), lockTimerEl = $('lockTimer'), lockEndsEl = $('lockEnds'), canUnstakeStatusEl = $('canUnstakeStatus'), totalStakedEl = $('totalStaked'), apyEl = $('apy'), lockDurationEl = $('lockDuration'), unclaimedRewardsEl = $('unclaimedRewards'), contractBalanceEl = $('contractBalance'), rewardRateEl = $('rewardRate'), walletBalanceEl = $('walletBalance'), activityContainer = $('activityContainer'), activityCount = $('activityCount'), stakeInput = $('stakeAmount'), withdrawInput = $('withdrawAmount'), walletOverlay = $('walletOverlay'), wsClose = $('wsClose'), notifOverlay = $('notificationOverlay'), notifGlow = $('notifGlow'), notifIconWrap = $('notifIconWrap'), notifIcon = $('notificationIcon'), notifTitle = $('notificationTitle'), notifMsg = $('notificationMessage'), notifTxContainer = $('notificationTxContainer'), notifTxHash = $('notificationTxHash'), notifTxLink = $('notificationTxLink'), closeNotify = $('closeNotifyBtn');
+
+            // ============================================================
+            // WALLET MODAL — diadopsi dari halaman terms
+            // ============================================================
+            connectBtn.addEventListener('click', () => { if (!account) walletOverlay.classList.add('show'); });
+            wsClose.addEventListener('click', () => walletOverlay.classList.remove('show'));
+            walletOverlay.addEventListener('click', e => { if (e.target === walletOverlay) walletOverlay.classList.remove('show'); });
+            window.connectWithWallet = async (type) => {
+                walletOverlay.classList.remove('show');
+                if (type === 'walletconnect') { showNotification('error', 'WalletConnect requires an additional library. Use MetaMask or Bitget in your browser.'); return; }
+                await doConnect();
+            };
+
+            // ============================================================
+            // NOTIFICATION — diadopsi dari halaman terms
+            // ============================================================
+            function showNotification(status, message, txHash = null) {
+                const cfg = { success: { icon: '✅', title: 'SUCCESS', color: 'rgba(0,212,255,0.22)', bg: 'rgba(0,212,255,0.08)' }, error: { icon: '❌', title: 'FAILED', color: 'rgba(255,75,75,0.22)', bg: 'rgba(255,75,75,0.07)' }, pending: { icon: '⏳', title: 'PENDING', color: 'rgba(251,191,36,0.22)', bg: 'rgba(251,191,36,0.07)' } }[status] || { icon: 'ℹ️', title: 'INFO', color: 'rgba(0,212,255,0.2)', bg: 'rgba(0,212,255,0.06)' };
+                notifIcon.innerText = cfg.icon; notifTitle.innerText = cfg.title; notifMsg.innerText = message;
+                notifIconWrap.style.background = cfg.bg; notifGlow.style.background = `radial-gradient(circle,${cfg.color} 0%,transparent 70%)`;
+                if (txHash) { notifTxHash.innerText = txHash.slice(0, 12) + '…' + txHash.slice(-6); notifTxLink.href = `${EXPLORER}/tx/${txHash}`; notifTxContainer.style.display = 'flex'; }
+                else notifTxContainer.style.display = 'none';
+                notifOverlay.classList.add('show');
+                if (status !== 'pending') setTimeout(() => notifOverlay.classList.remove('show'), 8000);
+            }
+            closeNotify.addEventListener('click', () => notifOverlay.classList.remove('show'));
+            notifOverlay.addEventListener('click', e => { if (e.target === notifOverlay) notifOverlay.classList.remove('show'); });
+
+            // ============================================================
+            // UTILS (tetap sama)
+            // ============================================================
+            const sa = a => a ? a.slice(0, 6) + '…' + a.slice(-4) : '';
+            function fmt(v, d = 2, trim = true) { if (v == null) return '0'; let n = parseFloat(v); if (isNaN(n)) return '0'; if (trim) { if (Number.isInteger(n) && d >= 0) return n.toString(); return parseFloat(n.toFixed(d)).toString(); } return n.toFixed(d); }
+            function fmtAPY(b) { let p = Number(b) / 100; return (p % 1 === 0 ? p.toFixed(0) : p.toFixed(2)) + '%'; }
+            function timeAgo(ts) { const s = Math.floor(Date.now() / 1000 - ts); if (s < 60) return s + 's ago'; if (s < 3600) return Math.floor(s / 60) + 'min ago'; if (s < 86400) return Math.floor(s / 3600) + 'hr ago'; return Math.floor(s / 86400) + 'd ago'; }
+
+            // ============================================================
+            // NETWORK (tetap sama)
+            // ============================================================
+            async function switchChain() {
+                try { await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x' + CHAIN_ID.toString(16) }] }); }
+                catch (e) { if (e.code === 4902) { try { await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: '0x' + CHAIN_ID.toString(16), chainName: CHAIN_NAME, nativeCurrency: { name: CURRENCY, symbol: CURRENCY, decimals: 18 }, rpcUrls: [RPC_URL], blockExplorerUrls: [EXPLORER] }] }); } catch { showNotification('error', 'Failed to add BNB Smart Chain.'); } } else showNotification('error', 'Please switch to BNB Smart Chain.'); }
+            }
+            async function updateBtn() {
+                if (!account) { connectBtn.innerHTML = '<i class="fas fa-plug"></i>&nbsp;Connect'; return; }
+                try { const net = await provider.getNetwork(); if (Number(net.chainId) !== CHAIN_ID) { connectBtn.innerHTML = '<i class="fas fa-triangle-exclamation"></i>&nbsp;Switch Network'; } else { connectBtn.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:#00d4ff;display:inline-block;box-shadow:0 0 6px #00d4ff;"></span>&nbsp;${sa(account)}`; } }
+                catch { connectBtn.innerHTML = `<span style="width:6px;height:6px;border-radius:50%;background:#00d4ff;display:inline-block;"></span>&nbsp;${sa(account)}`; }
+            }
+            async function doConnect() {
+                if (!window.ethereum) { showNotification('error', 'Wallet not detected. Please install MetaMask or Bitget Wallet.'); return; }
+                try { provider = new ethers.BrowserProvider(window.ethereum); await provider.send('eth_requestAccounts', []); signer = await provider.getSigner(); account = await signer.getAddress(); const net = await provider.getNetwork(); if (Number(net.chainId) !== CHAIN_ID) await switchChain(); initContracts(); await fetchTokenInfo(); startRefresh(); await updateBtn(); showNotification('success', 'Wallet connected successfully!'); }
+                catch { showNotification('error', 'Connection cancelled or failed.'); }
+            }
+            function initContracts() { if (!signer) return; stakingContract = new ethers.Contract(STAKING_ADDR, STAKING_ABI, signer); tokenContract = new ethers.Contract(TOKEN_ADDR, TOKEN_ABI, signer); }
+            async function fetchTokenInfo() { if (!tokenContract) return; try { decimals = await tokenContract.decimals(); tokenSymbol = await tokenContract.symbol(); } catch { } }
+
+            // ============================================================
+            // REFRESH (tetap sama)
+            // ============================================================
+            async function refreshUser() {
+                if (!account || !stakingContract) return;
+                try {
+                    const user = await stakingContract.users(account); const staked = ethers.formatUnits(user[0], decimals); const locked = Number(user[1]); const rewards = await stakingContract.earned(account);
+                    stakedAmountEl.innerText = fmt(staked, 2); pendingRewardEl.innerText = fmt(ethers.formatUnits(rewards, decimals), 4, true);
+                    const lockRem = await stakingContract.lockTimeRemaining(account); const can = await stakingContract.canUnstake(account);
+                    if (can) { canUnstakeStatusEl.className = 'chip chip-ok'; canUnstakeStatusEl.innerText = '✅ Can Withdraw'; }
+                    else { canUnstakeStatusEl.className = 'chip chip-no'; canUnstakeStatusEl.innerText = '❌ Locked'; }
+                    if (locked === 0) { lockEndsEl.innerText = 'No staking yet'; lockTimerEl.innerHTML = '<i class="fas fa-lock" style="font-size:.58rem;"></i>&nbsp;--'; }
+                    else { const d = new Date(locked * 1000); lockEndsEl.innerText = d.toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); const secs = Number(lockRem); if (secs <= 0) { lockTimerEl.innerHTML = '<i class="fas fa-lock-open" style="font-size:.58rem;"></i>&nbsp;Unlocked'; } else { const dy = Math.floor(secs / 86400), hr = Math.floor((secs % 86400) / 3600); lockTimerEl.innerHTML = `<i class="fas fa-lock" style="font-size:.58rem;"></i>&nbsp;${dy}d ${hr}hr`; } }
+                    if (tokenContract && account) { const bal = await tokenContract.balanceOf(account); walletBalanceEl.innerText = fmt(ethers.formatUnits(bal, decimals), 2); }
+                } catch (e) { console.error('user', e); }
+            }
+            async function refreshPool() {
+                if (!stakingContract) return;
+                try {
+                    const total = await stakingContract.totalStaked(); totalStakedEl.innerText = fmt(ethers.formatUnits(total, decimals), 0) + ' ' + tokenSymbol;
+                    const apyVal = await stakingContract.getAPY(); apyEl.innerText = fmtAPY(apyVal);
+                    const lockDur = await stakingContract.lockDuration(); const days = Number(lockDur) / 86400; lockDurationEl.innerText = (Number.isInteger(days) ? days : days.toFixed(1)) + ' days';
+                    const unclaimed = await stakingContract.totalUnclaimedRewards(); unclaimedRewardsEl.innerText = fmt(ethers.formatUnits(unclaimed, decimals), 2);
+                    if (tokenContract) { const cb = await tokenContract.balanceOf(STAKING_ADDR); contractBalanceEl.innerText = fmt(ethers.formatUnits(cb, decimals), 2); }
+                    const rate = await stakingContract.rewardRate(); rewardRateEl.innerText = ethers.formatUnits(rate, decimals) + '/sec';
+                } catch (e) { console.error('pool', e); }
+            }
+            async function refreshActivity() {
+                if (!stakingContract || !provider) { activityContainer.innerHTML = `<div class="empty"><div class="empty-ico"><i class="fas fa-plug"></i></div><h3>Not Connected</h3><p>Connect your wallet to view transaction history</p></div>`; if (activityCount) activityCount.innerText = '0 transactions'; return; }
+                try {
+                    const cur = await provider.getBlockNumber(); const f = account ? [account] : null; const ranges = [2000]; let all = [], ok = false;
+                    for (let r of ranges) { try { const from = Math.max(0, cur - r); const s = await stakingContract.queryFilter(stakingContract.filters.Staked(f), from); const w = await stakingContract.queryFilter(stakingContract.filters.Withdrawn(f), from); const c = await stakingContract.queryFilter(stakingContract.filters.RewardClaimed(f), from); const ex = await stakingContract.queryFilter(stakingContract.filters.LockExtended(f), from); all = [...s, ...w, ...c, ...ex]; ok = true; break; } catch { } }
+                    if (!ok) throw new Error('rpc');
+                    all.sort((a, b) => b.blockNumber - a.blockNumber); const latest = all.slice(0, 12);
+                    if (latest.length === 0) { activityContainer.innerHTML = `<div class="empty"><div class="empty-ico"><i class="fas fa-database"></i></div><h3>No Activity Yet</h3><p>Be the first to stake MEGAH!</p></div>`; if (activityCount) activityCount.innerText = '0 transactions'; return; }
+                    if (activityCount) activityCount.innerText = latest.length + ' transactions';
+                    let html = '<div class="alist">';
+                    for (let ev of latest) { const blk = await ev.getBlock(); const ts = blk.timestamp; const user = ev.args[0]; const short = sa(user); const txs = ev.transactionHash.slice(0, 8) + '…' + ev.transactionHash.slice(-4); let ico, desc; if (ev.eventName === 'Staked') { ico = '📥'; const a = ethers.formatUnits(ev.args[1], decimals); desc = `Stake ${fmt(a, 2)} MEGAH`; } else if (ev.eventName === 'Withdrawn') { ico = '📤'; const a = ethers.formatUnits(ev.args[1], decimals); desc = `Withdraw ${fmt(a, 2)} MEGAH`; } else if (ev.eventName === 'RewardClaimed') { ico = '🎁'; const a = ethers.formatUnits(ev.args[1], decimals); desc = `Claim ${fmt(a, 2)} MEGAH`; } else { ico = '⏳'; desc = 'Extend lock'; } html += `<div class="aitem"><div class="aico">${ico}</div><div class="ainf"><div class="atop"><span>${desc}</span><span class="atime">${timeAgo(ts)}</span></div><div class="abot">${short} · ${txs}</div></div></div>`; }
+                    html += '</div>'; activityContainer.innerHTML = html;
+                } catch (e) { console.error(e); activityContainer.innerHTML = `<div class="empty"><div class="empty-ico"><i class="fas fa-triangle-exclamation" style="color:#fb923c;"></i></div><h3>RPC Limit</h3><p>Please try again in a moment</p></div>`; }
+            }
+            async function refreshAll() { await refreshUser(); await refreshPool(); await updateBtn(); await refreshActivity(); }
+            let ri; function startRefresh() { if (ri) clearInterval(ri); refreshAll(); ri = setInterval(refreshAll, 60000); }
+
+            // ============================================================
+            // ACTIONS (tetap sama)
+            // ============================================================
+            async function handleStake() {
+                if (!account) { showNotification('error', 'Please connect your wallet first'); return; }
+                const amount = stakeInput.value; if (!amount || parseFloat(amount) <= 0) { showNotification('error', 'Please enter a valid amount'); return; }
+                try { const wei = ethers.parseUnits(amount, decimals); const al = await tokenContract.allowance(account, STAKING_ADDR); if (al < wei) { showNotification('pending', 'Approving token allowance…'); const at = await tokenContract.approve(STAKING_ADDR, wei); await at.wait(); } showNotification('pending', 'Processing stake…'); const tx = await stakingContract.stake(wei); await tx.wait(); showNotification('success', `Successfully staked ${amount} ${tokenSymbol}!`, tx.hash); refreshAll(); stakeInput.value = ''; }
+                catch (e) { showNotification('error', e.reason || 'Staking failed. Please try again.'); }
+            }
+            async function handleWithdraw() {
+                if (!account) { showNotification('error', 'Please connect your wallet first'); return; }
+                const amount = withdrawInput.value; if (!amount || parseFloat(amount) <= 0) { showNotification('error', 'Please enter a valid amount'); return; }
+                try { const wei = ethers.parseUnits(amount, decimals); showNotification('pending', 'Processing withdrawal…'); const tx = await stakingContract.withdraw(wei); await tx.wait(); showNotification('success', `Successfully withdrew ${amount} ${tokenSymbol}!`, tx.hash); refreshAll(); withdrawInput.value = ''; }
+                catch (e) { showNotification('error', e.reason || 'Withdrawal failed. Tokens may still be locked.'); }
+            }
+            async function handleExtend() {
+                if (!account) return;
+                try { showNotification('pending', 'Extending lock period…'); const tx = await stakingContract.extendLock(); await tx.wait(); showNotification('success', 'Lock successfully extended by 90 days!', tx.hash); refreshAll(); }
+                catch (e) { showNotification('error', e.reason || 'Failed to extend lock'); }
+            }
+            async function handleClaim() {
+                if (!account) return;
+                try { showNotification('pending', 'Claiming reward…'); const tx = await stakingContract.claimReward(); const receipt = await tx.wait(); let claimed = null; for (const log of receipt.logs) { try { const p = stakingContract.interface.parseLog(log); if (p && p.name === 'RewardClaimed') { claimed = ethers.formatUnits(p.args.amount, decimals); break; } } catch { } } showNotification('success', claimed ? `Successfully claimed ${claimed} ${tokenSymbol}!` : 'Reward claimed successfully!', tx.hash); refreshAll(); }
+                catch (e) { showNotification('error', e.reason || 'Claim failed'); }
+            }
+            function setStakeMax() { const b = walletBalanceEl.innerText.replace(/,/g, ''); if (b && parseFloat(b) > 0) stakeInput.value = b; }
+            async function setWithdrawMax() { if (!stakingContract || !account) return; try { const user = await stakingContract.users(account); withdrawInput.value = fmt(ethers.formatUnits(user[0], decimals), 6); } catch { showNotification('error', 'Failed to fetch maximum balance'); } }
+
+            // ============================================================
+            // LISTENERS (tetap sama)
+            // ============================================================
+            $('stakeBtn').addEventListener('click', handleStake);
+            $('withdrawBtn').addEventListener('click', handleWithdraw);
+            $('extendLockBtn').addEventListener('click', handleExtend);
+            $('claimBtn').addEventListener('click', handleClaim);
+            $('stakeMaxBtn').addEventListener('click', setStakeMax);
+            $('withdrawMaxBtn').addEventListener('click', setWithdrawMax);
+
+            // ============================================================
+            // AUTO-CONNECT & EVENTS (tetap sama)
+            // ============================================================
+            if (window.ethereum) {
+                window.ethereum.request({ method: 'eth_accounts' }).then(async a => { if (a.length > 0) await doConnect(); }).catch(() => { });
+                window.ethereum.on('accountsChanged', a => { if (!a.length) { account = null; connectBtn.innerHTML = '<i class="fas fa-plug"></i>&nbsp;Connect'; refreshAll(); } else doConnect(); });
+                window.ethereum.on('chainChanged', () => window.location.reload());
+            }
+            (async function init() {
+                if (window.ethereum) { provider = new ethers.BrowserProvider(window.ethereum); stakingContract = new ethers.Contract(STAKING_ADDR, STAKING_ABI, provider); tokenContract = new ethers.Contract(TOKEN_ADDR, TOKEN_ABI, provider); }
+                await refreshPool(); await refreshActivity();
+            })();
+        })();
+
+        // ========== STAKING CALCULATOR ==========
+        (function initCalculator() {
+            const calcInput = document.getElementById('calcStakeAmount');
+
+            if (!calcInput) {
+                console.log('Calculator element not found');
+                return;
+            }
+
+            function updateCalculator() {
+                let stakeAmount = parseFloat(calcInput.value);
+
+                if (isNaN(stakeAmount) || stakeAmount < 0) {
+                    stakeAmount = 0;
+                }
+
+                const APY = 0.05; // 5% APY
+                const SECONDS_PER_YEAR = 365 * 24 * 60 * 60;
+
+                const rewardPerYear = stakeAmount * APY;
+                const rewardPerSecond = rewardPerYear / SECONDS_PER_YEAR;
+
+                const periods = [
+                    { days: 1, elementId: 'calcDay1' },
+                    { days: 7, elementId: 'calcWeek1' },
+                    { days: 30, elementId: 'calcMonth1' },
+                    { days: 365, elementId: 'calcYear1' }
+                ];
+
+                for (let p of periods) {
+                    const secondsStaked = p.days * 24 * 60 * 60;
+                    const reward = rewardPerSecond * secondsStaked;
+
+                    const element = document.getElementById(p.elementId);
+                    if (element) {
+                        if (reward < 0.0001 && reward > 0) {
+                            element.innerText = '< 0.0001 MEGAH';
+                        } else {
+                            element.innerText = reward.toFixed(4) + ' MEGAH';
+                        }
+                    }
+                }
+            }
+
+            calcInput.addEventListener('input', updateCalculator);
+
+            updateCalculator();
+
+            console.log('Calculator initialized');
+        })();
+
+        // ========== FAQ ==========
+        function toggleFaq(el) { const isOpen = el.classList.contains('open'); document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open')); if (!isOpen) el.classList.add('open'); }
+    </script>
+</body>
+
+</html>

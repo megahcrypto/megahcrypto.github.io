@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta Nama="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/megahcrypto/megahcrypto.github.io/refs/heads/main/images/megah-logo.png" />
+    <title>Beli MEGAH - Token Utilitas Ekosistem Megah Crypto</title>
+    <meta Nama="description"
+        content="Beli MEGAH Token di BNB Smart Chain melalui Web3 wallet. Hubungkan wallet, masukkan BNB, dan beli MEGAH langsung dari halaman resmi token sale.">
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@4.16.0/dist/web3.min.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0B0C10;
+
+            color: #E0E0E0;
+            min-height: 100vh;
+            padding: 0.75rem;
+            position: relative;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glass-card {
+            background: rgba(20, 22, 27, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 10px rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 255, 255, 0.6);
+            box-shadow: 0 8px 30px rgba(0, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, #00E5FF, #B926FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00E5FF, #9D4EFF);
+            color: #0A0A0F;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 40px;
+            border: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.5);
+            filter: brightness(1.05);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1.5px solid #00E5FF;
+            color: #00E5FF;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 40px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: #00E5FF;
+            color: #0A0A0F;
+            box-shadow: 0 0 20px #00E5FF;
+        }
+
+        .input-modern {
+            background: white;
+            border: 2px solid rgba(0, 229, 255, 0.3);
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            color: #000000;
+            /* Teks hitam */
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .input-modern:focus {
+            border-color: #00E5FF;
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+            background: white;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            height: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #00E5FF, #9D4EFF);
+            height: 100%;
+            width: 0%;
+            border-radius: 40px;
+            position: relative;
+            transition: width 0.5s cubic-bezier(0.2, 0.9, 0.4, 1);
+            box-shadow: 0 0 12px #00E5FF;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 20px;
+            padding: 1rem 0.75rem;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .stat-label {
+            color: #A0AAB5;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00E5FF, #B926FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .stat-unit {
+            font-size: 0.7rem;
+            color: #00E5FF;
+            opacity: 0.8;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .countdown-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: 20px;
+            padding: 0.75rem 0.25rem;
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00E5FF, #B926FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .countdown-text {
+            font-size: 0.6rem;
+            color: #A0AAB5;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        /* TOKEN INFO CARD */
+        .token-info {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 24px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #A0AAB5;
+            font-size: 0.85rem;
+        }
+
+        .info-value {
+            background: linear-gradient(135deg, #00E5FF, #B926FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            color: #00E5FF;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 0.5rem;
+        }
+
+        .copy-btn:hover {
+            color: white;
+            transform: scale(1.1);
+            text-shadow: 0 0 5px #00E5FF;
+        }
+
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-radius: 40px;
+            padding: 0.25rem 1rem;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+        }
+
+        .badge-active {
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid #00E5FF;
+            color: #00E5FF;
+        }
+
+        .badge-paused {
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid #FFB700;
+            color: #FFB700;
+        }
+
+        .badge-inactive {
+            background: rgba(255, 68, 68, 0.15);
+            border: 1px solid #FF5555;
+            color: #FF5555;
+        }
+
+        .badge-ended {
+            background: rgba(108, 117, 125, 0.15);
+            border: 1px solid #8E9EAE;
+            color: #8E9EAE;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #00E5FF;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 4px #00E5FF;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.5);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 229, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 229, 255, 0);
+            }
+        }
+
+        .modal-modern {
+            background: rgba(15, 18, 25, 0.98);
+            backdrop-filter: blur(30px);
+            border: 2px solid #00E5FF;
+            border-radius: 32px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.25);
+        }
+
+        .purchase-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.5rem;
+            align-items: center;
+            background: rgba(0, 229, 255, 0.05);
+            border-radius: 20px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 229, 255, 0.15);
+        }
+
+        .main-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .error-message {
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #FF5555;
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            color: #FF8888;
+            font-size: 0.9rem;
+            display: none;
+            backdrop-filter: blur(8px);
+        }
+
+        .warning-message {
+            background: rgba(255, 183, 0, 0.1);
+            border: 1px solid #FFB700;
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            color: #FFD966;
+            font-size: 0.9rem;
+            backdrop-filter: blur(8px);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .flex.justify-between.items-center.bg-black\/30 {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+        }
+    </style>
+
+    <meta Nama="theme-color" content="#070A12">
+    <meta Nama="robots" content="index, follow">
+    <style>
+        /* =========================================================
+           MEGAH SALE — PRESENTATION LAYER ONLY
+           Web3 JavaScript / contract logic is preserved below.
+           ========================================================= */
+        :root {
+            --bg: #070A12;
+            --panel: #0D111C;
+            --panel-2: #101725;
+            --line: rgba(255, 255, 255, .09);
+            --muted: #8D98AA;
+            --text: #F4F7FB;
+            --accent: #B9FF4A;
+            --accent-2: #7DFF00;
+            --accent-soft: rgba(185, 255, 74, .10);
+            --danger: #ff657a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg)
+        }
+
+        body {
+            background:
+                radial-gradient(900px 420px at 50% -10%, rgba(185, 255, 74, .09), transparent 62%),
+                var(--bg) !important;
+            color: var(--text) !important;
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+            padding: 12px !important;
+        }
+
+        body::before {
+            display: none !important
+        }
+
+        .main-container {
+            max-width: 680px !important;
+            width: 100%;
+        }
+
+        .main-container.space-y-4 {
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .glass-card {
+            background: linear-gradient(180deg, rgba(16, 23, 37, .96), rgba(10, 14, 23, .96)) !important;
+            border: 1px solid var(--line) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .18) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            transform: none !important;
+            border-color: rgba(185, 255, 74, .20) !important;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .22) !important
+        }
+
+        .gold-gradient {
+            background: linear-gradient(90deg, #E9FFBE, #B9FF4A) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #C9FF69, #8FEA17) !important;
+            color: #081006 !important;
+            box-shadow: 0 8px 24px rgba(142, 234, 23, .16) !important;
+            border-radius: 12px !important;
+            animation: none !important;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 10px 28px rgba(142, 234, 23, .24) !important;
+            filter: brightness(1.03) !important;
+            transform: translateY(-1px) !important
+        }
+
+        .btn-secondary {
+            background: rgba(185, 255, 74, .06) !important;
+            border: 1px solid rgba(185, 255, 74, .35) !important;
+            color: #C9FF7B !important;
+            border-radius: 12px !important;
+            animation: none !important;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(185, 255, 74, .12) !important;
+            color: #E9FFBE !important;
+            box-shadow: none !important
+        }
+
+        .input-modern {
+            background: #080C14 !important;
+            color: #F5F7FA !important;
+            border: 1px solid rgba(255, 255, 255, .12) !important;
+            border-radius: 12px !important;
+            padding: 14px 15px !important;
+            box-shadow: none !important;
+        }
+
+        .input-modern::placeholder {
+            color: #667185
+        }
+
+        .input-modern:focus {
+            border-color: rgba(185, 255, 74, .55) !important;
+            box-shadow: 0 0 0 3px rgba(185, 255, 74, .08) !important;
+            background: #080C14 !important
+        }
+
+        .stats-grid {
+            gap: 8px !important
+        }
+
+        .stat-item {
+            background: #090E17 !important;
+            border: 1px solid rgba(255, 255, 255, .07) !important;
+            border-radius: 14px !important;
+            padding: 13px 9px !important
+        }
+
+        .stat-label {
+            color: #778296 !important;
+            font-size: .64rem !important;
+            letter-spacing: .8px !important
+        }
+
+        .stat-value {
+            font-size: 1.2rem !important
+        }
+
+        .stat-unit {
+            color: #A6B1C2 !important;
+            font-size: .62rem !important
+        }
+
+        .progress-bar {
+            background: #080C14 !important;
+            height: 9px !important;
+            border: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #B9FF4A, #7DFF00) !important;
+            box-shadow: none !important
+        }
+
+        .countdown-grid {
+            gap: 7px !important
+        }
+
+        .countdown-block {
+            background: #090E17 !important;
+            border: 1px solid rgba(255, 255, 255, .07) !important;
+            border-radius: 13px !important;
+            padding: 10px 4px !important
+        }
+
+        .countdown-number {
+            font-size: 1.1rem !important
+        }
+
+        .countdown-text {
+            font-size: .56rem !important;
+            color: #707B8E !important
+        }
+
+        .token-info {
+            background: #090E17 !important;
+            border: 1px solid rgba(255, 255, 255, .07) !important;
+            border-radius: 14px !important
+        }
+
+        .info-row {
+            border-bottom-color: rgba(255, 255, 255, .07) !important
+        }
+
+        .info-label {
+            color: #7F8A9C !important
+        }
+
+        .info-value {
+            background: none !important;
+            -webkit-text-fill-color: #DDE4EE !important;
+            color: #DDE4EE !important
+        }
+
+        .copy-btn {
+            color: #B9FF4A !important
+        }
+
+        .badge-active {
+            background: rgba(185, 255, 74, .08) !important;
+            border-color: rgba(185, 255, 74, .35) !important;
+            color: #C9FF7B !important
+        }
+
+        .dot {
+            background: #B9FF4A !important;
+            box-shadow: 0 0 7px #B9FF4A !important
+        }
+
+        .modal-modern {
+            background: #0D111C !important;
+            border: 1px solid rgba(185, 255, 74, .35) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5) !important;
+            backdrop-filter: none !important
+        }
+
+        .purchase-item {
+            background: #090E17 !important;
+            border: 1px solid rgba(255, 255, 255, .07) !important;
+            border-radius: 12px !important
+        }
+
+        .warning-message {
+            background: rgba(255, 183, 0, .07) !important;
+            backdrop-filter: none !important
+        }
+
+        .hero-card {
+            padding: 0 !important
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/7;
+            background: linear-gradient(135deg, #111827, #0A0E16);
+            overflow: hidden
+        }
+
+        .hero-image-wrap img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(5, 8, 13, .84), rgba(5, 8, 13, .18) 65%, rgba(5, 8, 13, .34));
+            pointer-events: none
+        }
+
+        .hero-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px
+        }
+
+        .hero-kicker {
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #C9FF7B;
+            margin-bottom: 7px
+        }
+
+        .hero-title {
+            font-size: clamp(1.5rem, 7vw, 2.25rem);
+            line-height: 1.04;
+            font-weight: 900;
+            letter-spacing: -.04em;
+            max-width: 520px
+        }
+
+        .hero-subtitle {
+            font-size: .83rem;
+            color: #CBD3DE;
+            margin-top: 8px;
+            max-width: 470px;
+            line-height: 1.5
+        }
+
+        .section-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 15px
+        }
+
+        .section-kicker {
+            font-size: .62rem;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: #788497;
+            font-weight: 800;
+            margin-bottom: 4px
+        }
+
+        .section-title {
+            font-size: 1.12rem;
+            font-weight: 850;
+            letter-spacing: -.02em
+        }
+
+        .howto {
+            display: grid;
+            gap: 9px
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 34px 1fr;
+            gap: 11px;
+            align-items: start;
+            padding: 12px;
+            background: #090E17;
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 14px
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: rgba(185, 255, 74, .10);
+            border: 1px solid rgba(185, 255, 74, .30);
+            display: grid;
+            place-items: center;
+            color: #C9FF7B;
+            font-size: .76rem;
+            font-weight: 900
+        }
+
+        .step h3 {
+            font-size: .86rem;
+            font-weight: 800;
+            color: #F3F6FA;
+            margin: 1px 0 4px
+        }
+
+        .step p {
+            font-size: .76rem;
+            line-height: 1.55;
+            color: #8E9AAC;
+            margin: 0
+        }
+
+        .url-box {
+            display: block;
+            margin-top: 8px;
+            padding: 9px 10px;
+            border-radius: 9px;
+            background: #060910;
+            border: 1px solid rgba(185, 255, 74, .16);
+            color: #C9FF7B;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: .68rem;
+            word-break: break-all
+        }
+
+        .notice {
+            margin-top: 10px;
+            padding: 10px 11px;
+            border-radius: 11px;
+            background: rgba(185, 255, 74, .055);
+            border: 1px solid rgba(185, 255, 74, .13);
+            font-size: .7rem;
+            line-height: 1.5;
+            color: #9AA5B5
+        }
+
+        .notice strong {
+            color: #DDF8AE
+        }
+
+        .network-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(185, 255, 74, .07);
+            border: 1px solid rgba(185, 255, 74, .2);
+            color: #C9FF7B;
+            font-size: .63rem;
+            font-weight: 800;
+            white-space: nowrap
+        }
+
+        .contract-link {
+            color: #B9FF4A
+        }
+
+        .footer-note {
+            color: #596476 !important
+        }
+
+        @media (max-width:520px) {
+            body {
+                padding: 8px !important
+            }
+
+            .hero-image-wrap {
+                aspect-ratio: 16/8.5
+            }
+
+            .hero-content {
+                padding: 16px
+            }
+
+            .hero-title {
+                font-size: 1.55rem
+            }
+
+            .hero-subtitle {
+                font-size: .76rem
+            }
+
+            .glass-card {
+                border-radius: 17px !important
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="globalError" class="error-message main-container" style="display:none;">
+        <i class="fa-solid fa-circle-exclamation mr-2"></i><span id="errorText"></span>
+    </div>
+    <div id="warningMessage" class="warning-message main-container" style="display:none;">
+        <i class="fa-solid fa-triangle-exclamation mr-2"></i><span id="warningText"></span>
+    </div>
+
+    <!-- UI transaksi/notifikasi yang diperlukan oleh JavaScript Web3 yang sudah ada. -->
+    <div id="txModal" class="fixed inset-0 flex items-center justify-center z-50 hidden px-4"
+        style="background:rgba(0,0,0,.90);">
+        <div class="modal-modern">
+            <button onclick="closeTxModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl transition"><i
+                    class="fa-solid fa-times"></i></button>
+            <div id="txModalIcon" class="text-5xl mb-4 flex justify-center"></div>
+            <h3 id="txModalTitle" class="text-2xl font-bold gold-gradient text-center"></h3>
+            <p id="txModalMessage" class="text-gray-300 mt-3 text-sm text-center"></p>
+            <div id="txModalActions" class="mt-6 flex flex-col items-center gap-2 hidden"></div>
+        </div>
+    </div>
+    <div id="notifModal" class="fixed inset-0 flex items-center justify-center z-40 hidden px-4"
+        style="background:rgba(0,0,0,.90);">
+        <div class="modal-modern">
+            <div class="flex justify-between items-start mb-4">
+                <div id="notifIcon" class="text-4xl"></div>
+                <button onclick="closeNotif()" class="text-gray-400 hover:text-white text-2xl"><i
+                        class="fa-solid fa-times"></i></button>
+            </div>
+            <h3 id="notifTitle" class="text-xl font-bold gold-gradient"></h3>
+            <p id="notifMessage" class="text-gray-300 mt-2 text-sm"></p>
+            <div id="notifActions" class="mt-4 flex flex-wrap justify-center gap-2"></div>
+        </div>
+    </div>
+
+    <main class="main-container space-y-4">
+        <!-- BANNER UTAMA: Ganti URL gambar di bawah ini saja. -->
+        <section class="glass-card hero-card" aria-label="Penjualan Token MEGAH">
+            <div class="hero-image-wrap">
+                <img src="https://megahcrypto.github.io/images/buy-megah-banner.png"
+                    alt="Penjualan Token MEGAH di BNB Smart Chain" fetchpriority="high" decoding="async">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <div class="hero-kicker">Penjualan Resmi Token MEGAH</div>
+                    <h1 class="hero-title">Beli Token MEGAH di BNB Smart Chain</h1>
+                    <p class="hero-subtitle">Hubungkan wallet Web3 Anda dan beli MEGAH langsung melalui halaman
+                        penjualan resmi.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WALLET -->
+        <section class="glass-card p-5" aria-label="Wallet Web3">
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <div class="section-kicker">Akses Web3</div>
+                    <h2 class="section-title">Hubungkan Wallet Anda</h2>
+                </div>
+                <span class="network-pill"><span class="dot" style="width:6px;height:6px;animation:none"></span> BNB
+                    Smart Chain</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 mt-4">
+                <div id="walletStatusDesc" class="text-xs text-gray-400">Hubungkan wallet Web3 yang kompatibel untuk
+                    melanjutkan.
+                </div>
+                <button id="walletActionBtn" class="btn-primary text-sm py-2 px-4"><i class="fa-solid fa-plug"></i>
+                    HUBUNGKAN</button>
+            </div>
+            <div id="walletDetail" class="hidden mt-4 pt-4 border-t border-white/10">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-gray-400 text-sm">Alamat Wallet</span>
+                    <div class="flex items-center gap-2"><span id="walletShort"
+                            class="font-mono text-sm text-[#B9FF4A]"></span><i
+                            class="fa-regular fa-copy copy-btn text-sm" onclick="copyAddress()"></i></div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Saldo BNB</div>
+                        <div class="stat-value"><span id="bnbBalance">0.00</span></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Saldo MEGAH</div>
+                        <div class="stat-value"><span id="tokenBalance">0.00</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DATA PENJUALAN -->
+        <section class="glass-card p-5" aria-labelledby="sale-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Data Penjualan Langsung</div>
+                    <h2 id="sale-heading" class="section-title">Penjualan Token MEGAH</h2>
+                </div>
+                <div id="saleStatusBadge" class="badge-status badge-active"><span class="dot"></span><span
+                        id="saleStatusText">PENJUALAN TOKEN MEGAH</span></div>
+            </div>
+            <div class="stats-grid mb-4">
+                <div class="stat-item">
+                    <div class="stat-label">Harga Penjualan</div>
+                    <div class="stat-value"><span id="rateValue">-</span></div>
+                    <div class="stat-unit">MEGAH / BNB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total Terjual</div>
+                    <div class="stat-value"><span id="tokensSold">-</span></div>
+                    <div class="stat-unit">MEGAH</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Total BNB Terkumpul</div>
+                    <div class="stat-value"><span id="weiRaised">-</span></div>
+                    <div class="stat-unit">BNB</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Tersisa</div>
+                    <div class="stat-value"><span id="tokenRemaining">-</span></div>
+                    <div class="stat-unit">MEGAH</div>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="flex justify-between text-sm mb-2"><span class="text-gray-400">Progres Penjualan</span><span
+                        class="text-[#B9FF4A] font-bold"><span id="progressPercent">0</span>%</span></div>
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" style="width:0%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1"><span id="soldAmountLabel">0
+                        MEGAH</span><span id="totalSupplyLabel">210.000 MEGAH Tersedia untuk Dijual!</span></div>
+            </div>
+            <div class="countdown-grid">
+                <div class="countdown-block">
+                    <div class="countdown-number" id="days">00</div>
+                    <div class="countdown-text">Hari</div>
+                </div>
+                <div class="countdown-block">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-text">Jam</div>
+                </div>
+                <div class="countdown-block">
+                    <div class="countdown-number" id="minutes">00</div>
+                    <div class="countdown-text">Menit</div>
+                </div>
+                <div class="countdown-block">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-text">Detik</div>
+                </div>
+            </div>
+            <div class="text-xs text-center text-gray-500 mt-2" id="endDateDisplay"></div>
+        </section>
+
+        <!-- BUY -->
+        <section class="glass-card p-5" aria-labelledby="buy-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Pembelian</div>
+                    <h2 id="buy-heading" class="section-title">Beli Token MEGAH</h2>
+                </div>
+            </div>
+            <div class="token-info mb-4">
+                <div class="flex justify-between items-center"><span class="text-gray-400">Maksimum
+                        Pembelian</span><span class="text-[#B9FF4A] font-bold"><span id="userMaxPurchase">0.00</span>
+                        BNB</span></div>
+                <div class="flex justify-between items-center text-sm mt-2"><span class="text-gray-400">Minimum
+                        Pembelian</span><span class="text-[#B9FF4A]"><span id="minPurchaseDisplay">0.1</span> BNB</span>
+                </div>
+            </div>
+            <label for="bnbInput" class="block text-xs font-semibold text-gray-400 mb-2">Jumlah BNB yang ingin
+                dibelanjakan</label>
+            <input type="number" id="bnbInput" step="0.01" inputmode="decimal" placeholder="Enter amount in BNB"
+                class="input-modern mb-4">
+            <div class="flex justify-between items-center bg-black/30 p-4 rounded-xl mb-4 border border-white/10"><span
+                    class="text-gray-400">Estimasi MEGAH</span><span class="text-xl font-bold gold-gradient"><span
+                        id="estimatedTokens">0</span> MEGAH</span></div>
+            <button id="buyBtn" class="btn-primary w-full py-4 text-base"><i class="fa-solid fa-bolt"></i> BELI
+                MEGAH</button>
+            <p class="text-xs text-center text-gray-500 mt-3">Ingin membeli melalui DEX? <a class="text-[#B9FF4A]"
+                    target="_blank" rel="noopener noreferrer"
+                    href="https://pancakeswap.finance/swap?chain=bsc&outputCurrency=0xc55d416476CFC6e879948eD5a5F4461c43Af45Aa&inputCurrency=0x55d398326f99059fF775485246999027B3197955">Buka
+                    PancakeSwap</a>.</p>
+        </section>
+
+        <!-- CARA MEMBELI -->
+        <section class="glass-card p-5" aria-labelledby="howto-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Panduan Pemula</div>
+                    <h2 id="howto-heading" class="section-title">Cara Membeli Token MEGAH</h2>
+                </div>
+            </div>
+            <p class="text-sm text-gray-400 leading-relaxed mb-4">Halaman penjualan MEGAH adalah DApp Web3. Untuk
+                pengalaman terbaik di perangkat seluler, buka halaman ini langsung melalui DApp Browser di aplikasi
+                wallet Anda.</p>
+            <div class="howto">
+                <article class="step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Buka DApp Browser di wallet Anda</h3>
+                        <p>Gunakan wallet Web3 yang kompatibel seperti MetaMask, TokenPocket, Bitget Wallet, Trust
+                            Wallet, atau wallet lain yang mendukung DApp Browser.</p>
+                    </div>
+                </article>
+                <article class="step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Buka halaman pembelian resmi MEGAH</h3>
+                        <p>Salin URL di bawah ini, lalu tempelkan ke DApp Browser di wallet Anda.</p><span
+                            class="url-box">https://megahcrypto.github.io/buy/</span>
+                    </div>
+                </article>
+                <article class="step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>Hubungkan wallet Anda</h3>
+                        <p>Setelah halaman terbuka, tekan <strong class="text-white">Hubungkan Wallet</strong> dan
+                            setujui permintaan koneksi wallet.</p>
+                    </div>
+                </article>
+                <article class="step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Gunakan BNB Smart Chain (BSC)</h3>
+                        <p>Pastikan wallet Anda terhubung ke <strong class="text-white">BNB Smart Chain
+                                (BSC)</strong> sebelum melakukan pembelian.</p>
+                    </div>
+                </article>
+                <article class="step">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h3>Masukkan jumlah BNB</h3>
+                        <p>Masukkan jumlah BNB yang ingin Anda belanjakan. Halaman akan otomatis menampilkan estimasi
+                            jumlah MEGAH yang akan Anda terima.</p>
+                    </div>
+                </article>
+                <article class="step">
+                    <div class="step-number">6</div>
+                    <div>
+                        <h3>Konfirmasi pembelian</h3>
+                        <p>Tekan <strong class="text-white">BELI MEGAH</strong>, periksa transaksi di wallet Anda, lalu
+                            konfirmasi. Tunggu hingga transaksi berhasil diproses di BNB Smart Chain.</p>
+                    </div>
+                </article>
+                <article class="step">
+                    <div class="step-number">7</div>
+                    <div>
+                        <h3>Tambahkan MEGAH ke wallet Anda — opsional</h3>
+                        <p>Setelah pembelian berhasil, tekan <strong class="text-white">Tambahkan MEGAH ke
+                                Wallet</strong> jika Anda ingin MEGAH muncul dalam daftar token di wallet Anda.</p>
+                    </div>
+                </article>
+            </div>
+            <div class="notice"><strong>Penting:</strong> Konfirmasikan hanya transaksi yang Anda pahami. Pastikan Anda
+                menggunakan halaman pembelian resmi MEGAH dan jaringan BNB Smart Chain sebelum mengirim BNB.</div>
+        </section>
+
+        <!-- INFO TOKEN -->
+        <section class="glass-card p-5" aria-labelledby="token-info-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Detail Aset</div>
+                    <h2 id="token-info-heading" class="section-title">Informasi Token MEGAH</h2>
+                </div>
+            </div>
+            <div class="token-info">
+                <div class="info-row"><span class="info-label">Nama</span><span class="info-value">MEGAH Token</span>
+                </div>
+                <div class="info-row"><span class="info-label">Simbol</span><span class="info-value">MEGAH</span></div>
+                <div class="info-row"><span class="info-label">Desimal</span><span class="info-value">18</span></div>
+                <div class="info-row"><span class="info-label">Total Suplai</span><span
+                        class="info-value">21,000,000</span></div>
+                <div class="info-row"><span class="info-label">Harga Token</span><span class="info-value">~$1</span>
+                </div>
+                <div class="info-row"><span class="info-label">Kontrak</span>
+                    <div class="flex items-center"><span class="info-value">0xc55d...45Aa</span><i
+                            class="fa-regular fa-copy copy-btn ml-2"
+                            onclick="copyToClipboard('0xc55d416476CFC6e879948eD5a5F4461c43Af45Aa')"></i></div>
+                </div>
+            </div>
+            <button id="addTokenBtn" class="btn-secondary w-full mt-4 py-3 text-sm"><i
+                    class="fa-solid fa-plus-circle"></i> TAMBAHKAN MEGAH KE WALLET</button>
+        </section>
+
+        <!-- PEMBELIAN ANDA -->
+        <section class="glass-card p-5" aria-labelledby="your-purchase-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Wallet Anda</div>
+                    <h2 id="your-purchase-heading" class="section-title">Pembelian MEGAH Anda</h2>
+                </div>
+            </div>
+            <div class="flex justify-between items-center p-4 bg-black/30 rounded-xl border border-white/10"><span
+                    class="text-gray-400">Total MEGAH Dibeli</span><span class="text-xl font-bold text-[#B9FF4A]"><span
+                        id="userPurchasedTokens">0</span> MEGAH</span></div>
+        </section>
+
+        <!-- PEMBELIAN TERBARU -->
+        <section class="glass-card p-5" aria-labelledby="recent-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Aktivitas On-chain</div>
+                    <h2 id="recent-heading" class="section-title">Pembelian MEGAH Terbaru</h2>
+                </div>
+            </div>
+            <div id="purchaseListContainer" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                <div class="text-center text-gray-400 py-4">Memuat pembelian...</div>
+            </div>
+        </section>
+
+        <!-- INFORMASI PENJUALAN -->
+        <section class="glass-card p-5" aria-labelledby="sale-info-heading">
+            <div class="section-head">
+                <div>
+                    <div class="section-kicker">Proyek & Alokasi</div>
+                    <h2 id="sale-info-heading" class="section-title">Informasi Penjualan MEGAH</h2>
+                </div>
+            </div>
+            <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
+                <p><strong class="text-white">Alokasi penjualan:</strong> Sebanyak 210.000 token MEGAH tersedia untuk
+                    penjualan token.</p>
+                <p>Dana yang terkumpul dari penjualan token MEGAH digunakan untuk mendukung likuiditas, stabilitas
+                    pasar, dan pengembangan proyek jangka panjang.</p>
+                <div class="grid grid-cols-1 gap-2">
+                    <div class="step">
+                        <div class="step-number">60%</div>
+                        <div>
+                            <h3>Likuiditas</h3>
+                            <p>Dialokasikan ke pool likuiditas MEGAH di bursa terdesentralisasi (DEX) untuk mendukung
+                                likuiditas perdagangan yang memadai.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">30%</div>
+                        <div>
+                            <h3>Stabilisasi Harga</h3>
+                            <p>Dicadangkan untuk dana stabilisasi harga yang dapat digunakan untuk tindakan pasar
+                                strategis, termasuk pembelian kembali token jika diperlukan.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">10%</div>
+                        <div>
+                            <h3>Operasional & Pengembangan</h3>
+                            <p>Dialokasikan untuk biaya operasional dan pengembangan ekosistem MEGAH secara
+                                berkelanjutan.</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="pt-1">Anda juga dapat memperdagangkan MEGAH di PancakeSwap setelah memperoleh token.</p>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-2 gap-3">
+            <a href="https://megahcrypto.github.io/staking/" target="_blank" rel="noopener noreferrer"
+                class="btn-primary py-3 text-sm text-center"><i class="fa-solid fa-layer-group"></i> STAKING</a>
+            <a href="https://pancakeswap.finance/swap?chain=bsc&outputCurrency=0xc55d416476CFC6e879948eD5a5F4461c43Af45Aa&inputCurrency=0x55d398326f99059fF775485246999027B3197955"
+                target="_blank" rel="noopener noreferrer" class="btn-secondary py-3 text-sm text-center"><i
+                    class="fa-solid fa-arrow-right-arrow-left"></i> PERDAGANGAN</a>
+        </div>
+
+        <footer class="glass-card p-4">
+            <div class="flex justify-center gap-6">
+                <a href="https://x.com/megahcrypto" target="_blank" rel="noopener noreferrer"
+                    class="text-[#B9FF4A] hover:text-white text-xl" aria-label="MEGAH on X"><i
+                        class="fa-brands fa-twitter"></i></a>
+                <a href="https://t.me/megahcrypto" target="_blank" rel="noopener noreferrer"
+                    class="text-[#B9FF4A] hover:text-white text-xl" aria-label="MEGAH on Telegram"><i
+                        class="fa-brands fa-telegram"></i></a>
+                <a href="https://megahcrypto.github.io/services/" target="_blank" rel="noopener noreferrer"
+                    class="text-[#B9FF4A] hover:text-white text-xl" aria-label="Megah Crypto Services"><i
+                        class="fa-brands fa-readme"></i></a>
+            </div>
+            <p class="text-center footer-note text-xs mt-3">© 2026 Megah Crypto Solution</p>
+        </footer>
+    </main>
+
+    <script>
+
+        const CONFIG = {
+            SALE_ADDRESS: "0x6286674d05D74DFBAD96AdA30D1fa90E059F6880",
+            TOKEN_ADDRESS: "0xc55d416476CFC6e879948eD5a5F4461c43Af45Aa",
+            CHAIN_ID: "0x38",
+            CHAIN_NAME: "BNB Smart Chain",
+            TOTAL_SUPPLY: 21_000_000,
+            PRESALE_ALLOCATION: 210_000,
+            RPC: "https://bsc-rpc.publicnode.com/",
+            TOKEN_SYMBOL: "MEGAH",
+            TOKEN_DECIMALS: 18,
+            TOKEN_LOGO_URL: "https://raw.githubusercontent.com/cryptorecehcom/images/refs/heads/main/tokenlogo/MEGAH.png",
+            NATIVE_SYMBOL: "BNB",
+            EXPLORER: "https://bscscan.com"
+        };
+
+        const SALE_ABI = [{ "inputs": [{ "internalType": "uint256", "name": "_rate", "type": "uint256" }, { "internalType": "address", "name": "_token", "type": "address" }, { "internalType": "uint256", "name": "_maxPurchase", "type": "uint256" }, { "internalType": "address", "name": "_initialOwner", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [], "name": "AmountExceedsUnsold", "type": "error" }, { "inputs": [], "name": "BelowMinPurchase", "type": "error" }, { "inputs": [], "name": "EnforcedPause", "type": "error" }, { "inputs": [], "name": "ExpectedPause", "type": "error" }, { "inputs": [], "name": "InsufficientTokens", "type": "error" }, { "inputs": [], "name": "InvalidDuration", "type": "error" }, { "inputs": [], "name": "MaxPurchaseReached", "type": "error" }, { "inputs": [], "name": "NoFundsToWithdraw", "type": "error" }, { "inputs": [], "name": "NotWhitelisted", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "OwnableInvalidOwner", "type": "error" }, { "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "OwnableUnauthorizedAccount", "type": "error" }, { "inputs": [], "name": "ReentrancyGuardReentrantCall", "type": "error" }, { "inputs": [], "name": "SaleEnded", "type": "error" }, { "inputs": [], "name": "SaleNotActive", "type": "error" }, { "inputs": [], "name": "SaleNotStarted", "type": "error" }, { "inputs": [], "name": "TransferGagal", "type": "error" }, { "inputs": [], "name": "ZeroAddress", "type": "error" }, { "inputs": [], "name": "ZeroAmount", "type": "error" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "FundsWithdrawn", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "newMaxPurchase", "type": "uint256" }], "name": "MaxPurchaseUpdated", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "newMinPurchase", "type": "uint256" }], "name": "MinPurchaseUpdated", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "account", "type": "address" }], "name": "Paused", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "newRate", "type": "uint256" }], "name": "RateUpdated", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "uint256", "name": "startTime", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "endTime", "type": "uint256" }], "name": "SaleStarted", "type": "event" }, { "anonymous": false, "inputs": [], "name": "SaleStopped", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "token", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "TokensWithdrawn", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "purchaser", "type": "address" }, { "indexed": true, "internalType": "address", "name": "beneficiary", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }, { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "TokensPurchased", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "account", "type": "address" }], "name": "Unpaused", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "user", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "status", "type": "bool" }], "name": "WhitelistUpdated", "type": "event" }, { "stateMutability": "payable", "type": "fallback" }, { "stateMutability": "payable", "type": "receive" }, { "inputs": [{ "internalType": "address", "name": "beneficiary", "type": "address" }], "name": "buyTokens", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "tokenAddress", "type": "address" }, { "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "emergencyWithdrawToken", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "additionalTime", "type": "uint256" }], "name": "extendSale", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "buyer", "type": "address" }], "name": "getMaxPurchase", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "buyer", "type": "address" }], "name": "getPurchasedAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getSaleStatus", "outputs": [{ "internalType": "bool", "name": "isActive", "type": "bool" }, { "internalType": "bool", "name": "hasStarted", "type": "bool" }, { "internalType": "bool", "name": "hasEnded", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getTimeRemaining", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "weiAmount", "type": "uint256" }], "name": "getTokenAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getTokenBalance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getTotalTokensSold", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "user", "type": "address" }], "name": "isWhitelisted", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "pause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "paused", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "purchasedAmounts", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "rate", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "saleActive", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "saleEndTime", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "saleStartTime", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "newMaxPurchase", "type": "uint256" }], "name": "setMaxPurchase", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "newMinPurchase", "type": "uint256" }], "name": "setMinPurchase", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "newRate", "type": "uint256" }], "name": "setRate", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "enabled", "type": "bool" }], "name": "setWhitelistEnabled", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "duration", "type": "uint256" }], "name": "startSale", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "stopSale", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "token", "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "unpause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address[]", "name": "addresses", "type": "address[]" }, { "internalType": "bool", "name": "status", "type": "bool" }], "name": "updateWhitelist", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "weiMaxPurchase", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "weiMinPurchase", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "weiRaised", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "whitelistEnabled", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "withdrawFunds", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }], "name": "withdrawUnsoldTokens", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
+        const TOKEN_ABI = [{ "constant": true, "inputs": [{ "name": "_owner", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "balance", "type": "uint256" }], "type": "function" }];
+
+        let web3Read = null;
+        let web3Write = null;
+        let saleContractRead = null;
+        let tokenContractRead = null;
+        let saleContractWrite = null;
+        let userAccount = null;
+        let isNetworkCorrect = false;
+        let provider = null;
+
+        let rate = 0;
+        let weiRaised = 0;
+        let tokenRemaining = 0;
+        let saleActive = false;
+        let salePaused = false;
+        let saleEndTime = 0;
+        let minPurchaseWei = 0n;
+        let minPurchaseBNB = 0.1;
+        let userMaxPurchaseWei = 0n;
+        let userPurchasedWei = 0n;
+
+        let timerInterval;
+        let countdownInterval;
+        let purchaseEvents = [];
+
+        function isValidEthAddress(addr) {
+            return /^0x[a-fA-F0-9]{40}$/.test(addr);
+        }
+
+        function detectProvider() {
+            return window.ethereum || (window.web3 && window.web3.currentProvider) || null;
+        }
+
+        function shortenAddress(addr) {
+            return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : '';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('globalError');
+            document.getElementById('errorText').innerText = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+        }
+
+        function showWarning(message) {
+            const warningDiv = document.getElementById('warningMessage');
+            document.getElementById('warningText').innerText = message;
+            warningDiv.style.display = 'block';
+        }
+
+        function hideWarning() {
+            document.getElementById('warningMessage').style.display = 'none';
+        }
+
+        function showTxModal(state, title, message, txHash = null, actions = []) {
+            const modal = document.getElementById('txModal');
+            document.getElementById('txModalIcon').innerHTML = state === 'loading' ? '<i class="fa-solid fa-circle-notch fa-spin text-[#FFD700] text-5xl"></i>' : (state === 'success' ? '<i class="fa-solid fa-circle-check text-[#FFD700] text-5xl"></i>' : '<i class="fa-solid fa-circle-exclamation text-[#FFD700] text-5xl"></i>');
+            document.getElementById('txModalTitle').innerText = title;
+            document.getElementById('txModalMessage').innerText = message;
+
+            const actionsContainer = document.getElementById('txModalActions');
+            actionsContainer.innerHTML = '';
+
+            if (actions.length) {
+                actions.forEach(a => {
+                    const btn = document.createElement('button');
+                    btn.className = a.className || 'btn-secondary text-sm py-2 px-4';
+                    btn.innerHTML = a.icon ? `<i class="${a.icon}"></i> ${a.text}` : a.text;
+                    btn.onclick = a.handler;
+                    actionsContainer.appendChild(btn);
+                });
+                actionsContainer.classList.remove('hidden');
+            } else {
+                actionsContainer.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeTxModal() {
+            document.getElementById('txModal').classList.add('hidden');
+        }
+
+        function showNotif(title, message, type = 'info', actions = []) {
+            const modal = document.getElementById('notifModal');
+            document.getElementById('notifTitle').innerText = title;
+            document.getElementById('notifMessage').innerText = message;
+
+            const icon = document.getElementById('notifIcon');
+            if (type === 'success') icon.innerHTML = '<i class="fa-solid fa-circle-check text-[#FFD700] text-5xl"></i>';
+            else if (type === 'error') icon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-[#FFD700] text-5xl"></i>';
+            else icon.innerHTML = '<i class="fa-solid fa-circle-info text-[#FFD700] text-5xl"></i>';
+
+            const actionsDiv = document.getElementById('notifActions');
+            actionsDiv.innerHTML = '';
+
+            actions.forEach(a => {
+                const btn = document.createElement('button');
+                btn.className = a.className || 'btn-secondary text-sm py-2 px-4';
+                btn.innerHTML = a.icon ? `<i class="${a.icon}"></i> ${a.text}` : a.text;
+                btn.onclick = a.handler;
+                actionsDiv.appendChild(btn);
+            });
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeNotif() {
+            document.getElementById('notifModal').classList.add('hidden');
+        }
+
+        function updateWalletButton() {
+            const btn = document.getElementById('walletActionBtn');
+            const statusDesc = document.getElementById('walletStatusDesc');
+
+            if (!userAccount) {
+                btn.innerHTML = '<i class="fa-solid fa-plug"></i> HUBUNGKAN';
+                btn.className = 'btn-primary text-sm py-2 px-4';
+                btn.onclick = () => connectWallet(false);
+                document.getElementById('walletDetail').classList.add('hidden');
+                hideWarning();
+            } else if (!isNetworkCorrect) {
+                btn.innerHTML = '<i class="fa-solid fa-arrows-spin"></i> GANTI KE BSC';
+                btn.className = 'btn-secondary text-sm py-2 px-4';
+                btn.onclick = switchToBNBSmartChain;
+                document.getElementById('walletDetail').classList.remove('hidden');
+                document.getElementById('walletShort').innerText = shortenAddress(userAccount);
+                showWarning('Silakan beralih ke jaringan BNB Smart Chain');
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> PUTUSKAN';
+                btn.className = 'btn-secondary text-sm py-2 px-4';
+                btn.onclick = disconnectWallet;
+                document.getElementById('walletDetail').classList.remove('hidden');
+                document.getElementById('walletShort').innerText = shortenAddress(userAccount);
+                hideWarning();
+            }
+        }
+
+        function disconnectWallet() {
+            userAccount = null;
+            isNetworkCorrect = false;
+            updateWalletButton();
+            loadPublicData();
+        }
+
+        async function initReadContract() {
+            try {
+                web3Read = new Web3(CONFIG.RPC);
+                saleContractRead = new web3Read.eth.Contract(SALE_ABI, CONFIG.SALE_ADDRESS);
+                tokenContractRead = new web3Read.eth.Contract(TOKEN_ABI, CONFIG.TOKEN_ADDRESS);
+
+                await saleContractRead.methods.rate().call();
+                console.log('✅ Kontrak berhasil dibaca');
+                return true;
+            } catch (e) {
+                console.error('❌ Gagal membaca kontrak:', e);
+                showError('Tidak dapat terhubung ke BNB Smart Chain. Periksa koneksi Anda.');
+                return false;
+            }
+        }
+
+        async function loadPublicData() {
+            if (!saleContractRead) return;
+
+            try {
+                const rateWei = await saleContractRead.methods.rate().call();
+                rate = parseFloat(web3Read.utils.fromWei(rateWei, 'ether'));
+                document.getElementById('rateValue').innerText = formatNumber(rate);
+
+                const weiRaisedWei = await saleContractRead.methods.weiRaised().call();
+                weiRaised = parseFloat(web3Read.utils.fromWei(weiRaisedWei, 'ether'));
+                document.getElementById('weiRaised').innerText = weiRaised.toFixed(2);
+
+                const soldTokens = weiRaised * rate;
+                document.getElementById('tokensSold').innerText = Math.round(soldTokens).toLocaleString();
+
+                document.getElementById('soldAmountLabel').innerHTML = `${Math.round(soldTokens).toLocaleString()} MEGAH`;
+
+                const tokenBalanceWei = await tokenContractRead.methods.balanceOf(CONFIG.SALE_ADDRESS).call();
+                tokenRemaining = parseFloat(web3Read.utils.fromWei(tokenBalanceWei, 'ether'));
+                document.getElementById('tokenRemaining').innerText = Math.round(tokenRemaining).toLocaleString();
+
+                const percent = (soldTokens / CONFIG.PRESALE_ALLOCATION) * 100;
+                document.getElementById('progressFill').style.width = Math.min(percent, 100) + '%';
+                document.getElementById('progressPercent').innerText = percent.toFixed(1);
+
+                document.getElementById('totalSupplyLabel').innerHTML =
+                    `${CONFIG.PRESALE_ALLOCATION.toLocaleString()} MEGAH for Sale!`;
+
+                saleActive = await saleContractRead.methods.saleActive().call();
+                salePaused = await saleContractRead.methods.paused().call();
+                saleEndTime = parseInt(await saleContractRead.methods.saleEndTime().call());
+
+                updateSaleStatusBadge();
+
+                minPurchaseWei = await saleContractRead.methods.weiMinPurchase().call();
+                minPurchaseBNB = parseFloat(web3Read.utils.fromWei(minPurchaseWei, 'ether'));
+                document.getElementById('minPurchaseDisplay').innerText = minPurchaseBNB.toFixed(2);
+                document.getElementById('bnbInput').setAttribute('min', minPurchaseBNB);
+                document.getElementById('bnbInput').placeholder = `Min ${minPurchaseBNB.toFixed(2)} BNB`;
+
+                updateEndDate();
+
+            } catch (e) {
+                console.error('Kesalahan memuat data publik:', e);
+                showError('Gagal memuat data penjualan. Silakan muat ulang halaman.');
+            }
+        }
+
+        function updateEndDate() {
+            if (saleEndTime > 0) {
+                const date = new Date(saleEndTime * 1000);
+                document.getElementById('endDateDisplay').innerText = 'Ends: ' + date.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        }
+
+        function updateSaleStatusBadge() {
+            const badge = document.getElementById('saleStatusBadge');
+            const statusText = document.getElementById('saleStatusText');
+
+            badge.className = 'badge-status';
+
+            if (salePaused) {
+                badge.classList.add('badge-paused');
+                statusText.innerText = 'PENJUALAN DIJEDA';
+            } else if (!saleActive) {
+                badge.classList.add('badge-inactive');
+                statusText.innerText = 'PENJUALAN TIDAK AKTIF';
+            } else if (saleEndTime < Math.floor(Date.now() / 1000)) {
+                badge.classList.add('badge-ended');
+                statusText.innerText = 'PENJUALAN BERAKHIR';
+            } else {
+                badge.classList.add('badge-active');
+                statusText.innerText = 'PENJUALAN AKTIF';
+            }
+        }
+
+        function updateCountdown() {
+            if (!saleEndTime) return;
+
+            const now = Math.floor(Date.now() / 1000);
+            const diff = saleEndTime - now;
+
+            if (diff <= 0) {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                return;
+            }
+
+            const days = Math.floor(diff / 86400);
+            const hours = Math.floor((diff % 86400) / 3600);
+            const minutes = Math.floor((diff % 3600) / 60);
+            const seconds = diff % 60;
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }
+
+        async function connectWallet(silent = false) {
+            if (!provider) {
+                showWalletNotFoundModal();
+                return;
+            }
+
+            if (!saleContractRead) {
+                showNotif('Error', 'Kontrak belum siap. Muat ulang halaman.', 'error');
+                return;
+            }
+
+            try {
+                const accounts = await provider.request({ method: 'eth_requestAccounts' });
+                if (!accounts?.length) throw new Error('No accounts');
+
+                userAccount = accounts[0];
+                web3Write = new Web3(provider);
+                saleContractWrite = new web3Write.eth.Contract(SALE_ABI, CONFIG.SALE_ADDRESS);
+
+                await checkNetwork();
+
+                if (isNetworkCorrect) {
+                    await loadUserData();
+                }
+
+                updateWalletButton();
+
+                if (!silent) {
+                    showNotif(
+                        isNetworkCorrect ? 'Terhubung' : 'Jaringan Salah',
+                        isNetworkCorrect ? `Wallet connected to ${CONFIG.CHAIN_NAME}!` : `Please switch to ${CONFIG.CHAIN_NAME}.`,
+                        isNetworkCorrect ? 'success' : 'warning'
+                    );
+                }
+            } catch (error) {
+                console.error('Kesalahan koneksi:', error);
+                if (!silent) showNotif('Koneksi Gagal', error.message || 'Ditolak oleh pengguna', 'error');
+            }
+        }
+
+        async function checkNetwork() {
+            if (!provider) return false;
+            try {
+                const chainId = await provider.request({ method: 'eth_chainId' });
+                isNetworkCorrect = chainId.toLowerCase() === CONFIG.CHAIN_ID.toLowerCase();
+                return isNetworkCorrect;
+            } catch (e) {
+                isNetworkCorrect = false;
+                return false;
+            }
+        }
+
+        async function switchToBNBSmartChain() {
+            if (!provider) {
+                showNotif('Wallet Tidak Ditemukan', 'Wallet tidak terdeteksi.', 'error');
+                return;
+            }
+
+            try {
+                await provider.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: CONFIG.CHAIN_ID }]
+                });
+
+                setTimeout(async () => {
+                    await checkNetwork();
+                    if (isNetworkCorrect) {
+                        await loadUserData();
+                        updateWalletButton();
+                        showNotif('Jaringan Berhasil Diganti', `Sekarang terhubung ke ${CONFIG.CHAIN_NAME}.`, 'success');
+                    }
+                }, 1000);
+            } catch (e) {
+                if (e.code === 4902) {
+                    try {
+                        await provider.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: CONFIG.CHAIN_ID,
+                                chainName: CONFIG.CHAIN_NAME,
+                                rpcUrls: [CONFIG.RPC],
+                                nativeCurrency: {
+                                    name: CONFIG.NATIVE_SYMBOL,
+                                    symbol: CONFIG.NATIVE_SYMBOL,
+                                    decimals: 18
+                                },
+                                blockExplorerUrls: [CONFIG.EXPLORER]
+                            }]
+                        });
+                        showNotif('Jaringan Ditambahkan', 'Silakan beralih ke BNB Smart Chain secara manual.', 'success');
+                    } catch (addErr) {
+                        showNotif('Error', 'Tidak dapat menambahkan BNB Smart Chain.', 'error');
+                    }
+                } else {
+                    showNotif('Kesalahan Pergantian Jaringan', e.message || 'Ditolak oleh pengguna', 'error');
+                }
+            }
+        }
+
+        async function loadUserData() {
+            if (!userAccount || !isValidEthAddress(userAccount)) return;
+
+            if (web3Write) {
+                try {
+                    const bnbWei = await web3Write.eth.getBalance(userAccount);
+                    document.getElementById('bnbBalance').innerText = parseFloat(web3Write.utils.fromWei(bnbWei, 'ether')).toFixed(4);
+                } catch (e) {
+                    console.warn('Gagal memuat saldo BNB');
+                }
+            }
+
+            if (tokenContractRead) {
+                try {
+                    const tokenWei = await tokenContractRead.methods.balanceOf(userAccount).call();
+                    document.getElementById('tokenBalance').innerText = parseFloat(web3Read.utils.fromWei(tokenWei, 'ether')).toFixed(2);
+                } catch (e) {
+                    console.warn('Gagal memuat saldo MEGAH');
+                }
+            }
+
+            try {
+                userMaxPurchaseWei = await (saleContractWrite?.methods.getMaxPurchase(userAccount).call() || saleContractRead?.methods.getMaxPurchase(userAccount).call());
+                document.getElementById('userMaxPurchase').innerText = parseFloat(web3Read.utils.fromWei(userMaxPurchaseWei, 'ether')).toFixed(2);
+            } catch (e) {
+                document.getElementById('userMaxPurchase').innerText = '0.00';
+            }
+
+            try {
+                userPurchasedWei = await (saleContractWrite?.methods.purchasedAmounts(userAccount).call() || saleContractRead?.methods.purchasedAmounts(userAccount).call());
+                const purchasedBnb = web3Read.utils.fromWei(userPurchasedWei, 'ether');
+                document.getElementById('userPurchasedTokens').innerText = Math.round(purchasedBnb * rate).toLocaleString();
+            } catch (e) {
+                document.getElementById('userPurchasedTokens').innerText = '0';
+            }
+        }
+
+        function estimateTokens() {
+            const amt = parseFloat(document.getElementById('bnbInput').value) || 0;
+            document.getElementById('estimatedTokens').innerText = Math.round(amt * rate).toLocaleString();
+        }
+
+        function setBuyButtonLoading(loading) {
+            const btn = document.getElementById('buyBtn');
+            btn.disabled = loading;
+            btn.innerHTML = loading ? '<i class="fa-solid fa-circle-notch fa-spin"></i> MEMPROSES...' : '<i class="fa-solid fa-bolt"></i> BELI SEKARANG';
+        }
+
+        async function buyTokens(e) {
+            e.preventDefault();
+
+            if (!userAccount) {
+                showNotif('Wallet Belum Terhubung', 'Silakan hubungkan wallet Anda terlebih dahulu.', 'error');
+                return;
+            }
+
+            if (!isNetworkCorrect) {
+                showNotif('Jaringan Salah', 'Ganti ke BNB Smart Chain.', 'error');
+                return;
+            }
+
+            if (!saleContractWrite) {
+                showNotif('Error', 'Wallet belum siap.', 'error');
+                return;
+            }
+
+            if (salePaused) {
+                showNotif('Penjualan Dijeda', 'Penjualan sedang dijeda oleh admin.', 'error');
+                return;
+            }
+
+            if (!saleActive) {
+                showNotif('Penjualan Tidak Aktif', 'Penjualan tidak aktif.', 'error');
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('bnbInput').value);
+            if (isNaN(amount) || amount < minPurchaseBNB) {
+                showNotif('Jumlah Terlalu Kecil', `Minimum pembelian adalah ${minPurchaseBNB.toFixed(2)} BNB`, 'error');
+                return;
+            }
+
+            try {
+                const maxPurchaseWei = await saleContractWrite.methods.getMaxPurchase(userAccount).call();
+                const maxBnb = parseFloat(web3Write.utils.fromWei(maxPurchaseWei, 'ether'));
+                if (amount > maxBnb) {
+                    showNotif('Melebihi Batas', `Anda hanya dapat membeli hingga ${maxBnb.toFixed(2)} BNB lagi.`, 'error');
+                    return;
+                }
+            } catch (e) {
+                console.error('Kesalahan memeriksa batas pembelian:', e);
+                showNotif('Error', 'Tidak dapat memverifikasi batas pembelian.', 'error');
+                return;
+            }
+
+            const amountWei = web3Write.utils.toWei(amount.toString(), 'ether');
+
+            showTxModal('loading', 'Transaksi Sedang Diproses', 'Silakan tunggu...');
+            setBuyButtonLoading(true);
+
+            const promiEvent = saleContractWrite.methods.buyTokens(userAccount).send({
+                from: userAccount,
+                value: amountWei,
+                gas: 300000
+            });
+
+            let receiptReceived = false;
+
+            promiEvent.on('transactionHash', function (hash) {
+                showTxModal('loading', 'Transaksi Terkirim', `Hash: ${hash.slice(0, 10)}...${hash.slice(-8)}`, null, [
+                    { text: 'Lihat di Explorer', icon: 'fa-solid fa-up-right-from-square', className: 'btn-secondary text-sm py-2 px-4', handler: () => window.open(`${CONFIG.EXPLORER}/tx/${hash}`, '_blank') }
+                ]);
+            });
+
+            promiEvent.on('receipt', function (receipt) {
+                if (receiptReceived) return;
+                receiptReceived = true;
+
+                const explorerUrl = `${CONFIG.EXPLORER}/tx/${receipt.transactionHash}`;
+                const tokenAmount = (amount * rate).toFixed(2);
+
+                showTxModal('success', 'Pembelian Berhasil!', `Anda membeli ${tokenAmount} MEGAH.`, null, [
+                    { text: 'Lihat di Explorer', icon: 'fa-solid fa-up-right-from-square', className: 'btn-secondary text-sm py-2 px-4', handler: () => window.open(explorerUrl, '_blank') },
+                    { text: 'Tambahkan MEGAH', icon: 'fa-solid fa-plus-circle', className: 'btn-primary text-sm py-2 px-4', handler: addTokenToWallet }
+                ]);
+
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#FFD700', '#FFAA00']
+                });
+
+                document.getElementById('bnbInput').value = '';
+                estimateTokens();
+                loadPublicData();
+                loadUserData();
+                loadPurchaseHistory();
+                setBuyButtonLoading(false);
+            });
+
+            promiEvent.on('error', function (err) {
+                if (receiptReceived) return;
+                console.error('Kesalahan pembelian:', err);
+                setBuyButtonLoading(false);
+
+                let userMsg = err.message || 'Transaksi gagal';
+                if (userMsg.includes('BelowMinPurchase')) userMsg = `Minimum adalah ${minPurchaseBNB.toFixed(2)} BNB`;
+                else if (userMsg.includes('MaxPurchaseReached')) userMsg = 'Batas maksimum pembelian telah tercapai';
+                else if (userMsg.includes('SaleNotActive')) userMsg = 'Sale is not active';
+                else if (userMsg.includes('SaleEnded')) userMsg = 'Penjualan telah berakhir';
+                else if (userMsg.includes('InsufficientTokens')) userMsg = 'MEGAH yang tersedia tidak mencukupi';
+                else if (userMsg.includes('paused')) userMsg = 'Penjualan sedang dijeda';
+                else if (userMsg.includes('User denied')) userMsg = 'Transaksi ditolak';
+
+                showTxModal('error', 'Transaksi Gagal', userMsg, null, []);
+            });
+        }
+
+        async function addTokenToWallet() {
+            if (!provider) {
+                showNotif('Tidak Ada Wallet', 'Silakan hubungkan wallet terlebih dahulu.', 'error');
+                return;
+            }
+
+            try {
+                await provider.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20',
+                        options: {
+                            address: CONFIG.TOKEN_ADDRESS,
+                            symbol: CONFIG.TOKEN_SYMBOL,
+                            decimals: CONFIG.TOKEN_DECIMALS,
+                            image: CONFIG.TOKEN_LOGO_URL
+                        }
+                    }
+                });
+                showNotif('Berhasil', 'MEGAH berhasil ditambahkan ke wallet!', 'success');
+            } catch (e) {
+                showNotif('Gagal', 'Tidak dapat menambahkan token ke wallet.', 'error');
+            }
+        }
+
+        function copyAddress() {
+            if (userAccount) {
+                navigator.clipboard.writeText(userAccount);
+                showNotif('Tersalin', 'Alamat wallet berhasil disalin.', 'info');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            showNotif('Tersalin!', 'Alamat disalin ke clipboard', 'success');
+        }
+
+        function handleAccountsChanged(accounts) {
+            if (!accounts.length) {
+                userAccount = null;
+                isNetworkCorrect = false;
+                updateWalletButton();
+            } else {
+                userAccount = accounts[0];
+                checkNetwork().then(() => {
+                    if (isNetworkCorrect) loadUserData();
+                    updateWalletButton();
+                });
+            }
+        }
+
+        function showWalletNotFoundModal() {
+            const message = `Silakan instal MetaMask atau wallet Web3 lainnya untuk melanjutkan.`;
+            const actions = [
+                { text: 'Tutup', icon: 'fa-solid fa-times', className: 'btn-secondary text-sm', handler: closeNotif }
+            ];
+            showNotif('Wallet Tidak Ditemukan', message, 'error', actions);
+        }
+
+        function formatNumber(num) {
+            return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+        }
+
+        async function fetchPurchaseEvents(limit = 15) {
+            if (!saleContractRead) return [];
+
+            try {
+                const latestBlock = await web3Read.eth.getBlockNumber();
+
+                const latestBlockStr = latestBlock.toString();
+                const latestBlockNum = parseInt(latestBlockStr);
+
+                const BLOCK_RANGE = 2000;
+                const fromBlock = Math.max(0, latestBlockNum - BLOCK_RANGE);
+
+                console.log(`Fetching events from block ${fromBlock} to ${latestBlockNum}`);
+
+                const events = await saleContractRead.getPastEvents('TokensPurchased', {
+                    fromBlock: fromBlock,
+                    toBlock: latestBlockNum
+                });
+
+                events.sort((a, b) => {
+                    const blockA = parseInt(a.blockNumber);
+                    const blockB = parseInt(b.blockNumber);
+                    return blockB - blockA;
+                });
+
+                const recent = events.slice(0, limit);
+
+                return await processEvents(recent);
+            } catch (err) {
+                console.error('Kesalahan mengambil riwayat pembelian:', err);
+                return [];
+            }
+        }
+
+        async function processEvents(events) {
+            const enriched = [];
+
+            for (const ev of events) {
+                try {
+                    const block = await web3Read.eth.getBlock(ev.blockNumber);
+
+                    let timestamp;
+                    if (typeof block.timestamp === 'bigint') {
+                        timestamp = Number(block.timestamp);
+                    } else {
+                        timestamp = parseInt(block.timestamp);
+                    }
+
+                    const timeAgo = getTimeAgo(timestamp * 1000);
+
+                    enriched.push({
+                        transactionHash: ev.transactionHash,
+                        purchaser: ev.returnValues.purchaser,
+                        valueBNB: parseFloat(web3Read.utils.fromWei(ev.returnValues.value, 'ether')),
+                        amountMEGAH: parseFloat(web3Read.utils.fromWei(ev.returnValues.amount, 'ether')),
+                        timeAgo: timeAgo
+                    });
+                } catch (err) {
+                    console.warn('Gagal memproses aktivitas:', err);
+                }
+            }
+
+            return enriched;
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (days > 0) return days + 'hari lalu';
+            if (hours > 0) return hours + 'jam lalu';
+            if (minutes > 0) return minutes + 'menit lalu';
+            return 'baru saja';
+        }
+
+        async function loadPurchaseHistory() {
+            const container = document.getElementById('purchaseListContainer');
+            container.innerHTML = '<div class="text-center text-gray-400 py-4"><i class="fa-solid fa-circle-notch fa-spin text-[#FFD700]"></i><p class="mt-2">Memuat...</p></div>';
+
+            const events = await fetchPurchaseEvents(15);
+            purchaseEvents = events;
+
+            renderPurchaseHistory(events);
+        }
+
+        function renderPurchaseHistory(events) {
+            const container = document.getElementById('purchaseListContainer');
+
+            if (!events.length) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-4">Belum ada pembelian</div>';
+                return;
+            }
+
+            let html = '';
+
+            events.forEach(ev => {
+                const shortAddr = shortenAddress(ev.purchaser);
+                const megahStr = ev.amountMEGAH.toFixed(0);
+                const bnbStr = ev.valueBNB.toFixed(2);
+
+                html += `
+                    <div class="purchase-item">
+                        <span class="font-mono text-[#FFD700] text-xs" title="${ev.purchaser}">${shortAddr}</span>
+                        <span class="text-white font-medium text-center">${megahStr} MEGAH</span>
+                        <span class="text-gray-400 text-xs text-right">${bnbStr} BNB<br><span class="text-gray-600">${ev.timeAgo}</span></span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Memulai sistem penjualan MEGAH...');
+
+            provider = detectProvider();
+
+            if (!provider) {
+                showWarning('Wallet Web3 tidak terdeteksi. Silakan instal MetaMask atau wallet Web3 lainnya.');
+            }
+
+            const initOk = await initReadContract();
+            if (!initOk) return;
+
+            document.getElementById('buyBtn').addEventListener('click', buyTokens);
+            document.getElementById('bnbInput').addEventListener('input', estimateTokens);
+            document.getElementById('addTokenBtn').addEventListener('click', addTokenToWallet);
+
+            if (provider) {
+                provider.on('accountsChanged', handleAccountsChanged);
+                provider.on('chainChanged', () => window.location.reload());
+            }
+
+            await loadPublicData();
+            await loadPurchaseHistory();
+
+            timerInterval = setInterval(loadPublicData, 15000);
+            countdownInterval = setInterval(updateCountdown, 1000);
+
+            if (provider) {
+                try {
+                    const accounts = await provider.request({ method: 'eth_accounts' });
+                    if (accounts.length > 0) await connectWallet(true);
+                } catch (e) { }
+            }
+
+            updateWalletButton();
+
+            console.log('✅ Sistem penjualan MEGAH siap');
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (timerInterval) clearInterval(timerInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+        });
+
+        window.closeTxModal = closeTxModal;
+        window.closeNotif = closeNotif;
+        window.copyAddress = copyAddress;
+        window.copyToClipboard = copyToClipboard;
+        window.addTokenToWallet = addTokenToWallet;
+        window.switchToBNBSmartChain = switchToBNBSmartChain;
+    </script>
+</body>
+
+</html>

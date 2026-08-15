@@ -1,0 +1,340 @@
+/* =========================================================
+   MEGAH CRYPTO - PLATFORM WEB3 HERO BANNER
+   Tambahkan di PALING BAWAH style.css
+   Tidak mengganggu komponen lain
+   ========================================================= */
+
+.hero {
+    min-height: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    display: block;
+    overflow: hidden;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 107, 0, 0.15);
+}
+
+.hero .container {
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    min-height: auto;
+    display: block;
+}
+
+.hero-content {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Banner utama */
+.hero-banner {
+    position: relative;
+    width: 100%;
+    min-height: 560px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #080811;
+}
+
+/* Gambar banner */
+.hero-banner-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    z-index: 1;
+}
+
+/* Lapisan gelap agar teks tetap terbaca */
+.hero-banner-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(5, 5, 12, 0.88) 0%,
+            rgba(5, 5, 12, 0.62) 38%,
+            rgba(5, 5, 12, 0.22) 72%,
+            rgba(5, 5, 12, 0.45) 100%
+        );
+
+    pointer-events: none;
+}
+
+/* Efek vignette */
+.hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            transparent 30%,
+            rgba(0, 0, 0, 0.35) 100%
+        );
+}
+
+/* Konten */
+.hero-banner-content {
+    position: relative;
+    z-index: 4;
+
+    width: 100%;
+    max-width: 1140px;
+
+    padding: 120px 30px 100px;
+
+    text-align: left;
+}
+
+/* Branding kecil */
+.hero-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    color: #fff;
+}
+
+.hero-brand img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+
+    border-radius: 12px;
+
+    filter:
+        drop-shadow(0 0 10px rgba(255, 107, 0, 0.65));
+}
+
+/* Judul */
+.hero-banner-content h1 {
+    margin: 0 0 18px;
+
+    max-width: 720px;
+
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    font-weight: 900;
+
+    letter-spacing: 3px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #ffb067 45%,
+            #ff6b00 100%
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: none;
+}
+
+/* Deskripsi */
+.hero-banner-content p {
+    max-width: 620px;
+
+    margin: 0 0 28px;
+
+    padding: 0;
+
+    color: rgba(255, 255, 255, 0.82);
+
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+/* Tombol */
+.hero-banner-content .hero-buttons {
+    display: flex;
+
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 12px;
+
+    width: auto;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+/* Override ukuran tombol lama khusus hero banner */
+.hero-banner-content .hero-btn {
+    min-width: 150px;
+    width: auto;
+    height: 48px;
+
+    padding: 12px 22px;
+
+    font-size: 0.85rem;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 991px) {
+
+    .hero-banner {
+        min-height: 500px;
+    }
+
+    .hero-banner-content {
+        padding: 100px 28px 80px;
+    }
+
+    .hero-banner-content h1 {
+        max-width: 600px;
+        font-size: clamp(2.2rem, 6vw, 3.5rem);
+    }
+
+    .hero-banner-content p {
+        max-width: 540px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .hero-banner {
+        min-height: 620px;
+
+        align-items: flex-end;
+    }
+
+    .hero-banner-image {
+        object-position: center center;
+    }
+
+    .hero-banner-overlay {
+        background:
+            linear-gradient(
+                180deg,
+                rgba(5, 5, 12, 0.18) 0%,
+                rgba(5, 5, 12, 0.30) 30%,
+                rgba(5, 5, 12, 0.88) 68%,
+                rgba(5, 5, 12, 0.98) 100%
+            );
+    }
+
+    .hero-banner-content {
+        padding: 40px 20px 42px;
+
+        text-align: center;
+    }
+
+    .hero-brand {
+        justify-content: center;
+
+        margin-bottom: 12px;
+
+        font-size: 0.72rem;
+        letter-spacing: 1.5px;
+    }
+
+    .hero-brand img {
+        width: 42px;
+        height: 42px;
+    }
+
+    .hero-banner-content h1 {
+        max-width: 100%;
+
+        margin-bottom: 14px;
+
+        font-size: clamp(2rem, 10vw, 3rem);
+
+        letter-spacing: 1.5px;
+    }
+
+    .hero-banner-content p {
+        max-width: 100%;
+
+        margin: 0 auto 22px;
+
+        font-size: 0.88rem;
+        line-height: 1.6;
+    }
+
+    .hero-banner-content .hero-buttons {
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 10px;
+    }
+
+    .hero-banner-content .hero-btn {
+        min-width: 140px;
+
+        height: 44px;
+
+        padding: 10px 16px;
+
+        font-size: 0.78rem;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE KECIL
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .hero-banner {
+        min-height: 590px;
+    }
+
+    .hero-banner-content {
+        padding: 32px 16px 34px;
+    }
+
+    .hero-banner-content h1 {
+        font-size: 1.85rem;
+    }
+
+    .hero-banner-content p {
+        font-size: 0.82rem;
+    }
+
+    .hero-banner-content .hero-btn {
+        min-width: 130px;
+        font-size: 0.74rem;
+    }
+
+}
